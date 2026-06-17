@@ -138,9 +138,12 @@ package/
 ─ 실행·검증
   40-backlog.md              백로그 / 스프린트 플랜 — 개발 단위·우선순위·일정
   41-qa-testcases.md         QA 테스트 케이스 — 핵심 시나리오·기대결과
-─ 최종 읽기 문서
-  index.html                 도식 시각화 중심 자체완결 HTML 대시보드 (마인드맵·다이어그램·순서도·아키텍처·ERD·차트·인포그래픽·웹툰 — 16종을 한눈에). `references/html-visual-template.md` 규칙으로 렌더.
-  INDEX.md                   전체 산출물의 중요도 그룹핑 + 작업 순서 + 역할별 묶음 + 최소 착수 세트 (모든 문서 작성 완료 후 마지막에 생성하는 길잡이).
+─ 길잡이 + HTML (STEP 1-b 선택; md 항상 보존)
+  INDEX.md                   전체 산출물의 중요도 그룹핑 + 작업 순서 + 역할별 묶음 + 최소 착수 세트 (모든 문서 작성 완료 후 마지막에 생성).
+  index.html                 [문서별 HTML+허브 선택 시] 허브 — 중요도·순서·역할별 링크(INDEX.md 반영). `references/html-doc-template.md`.
+  00-…/01-… .html            [문서별 HTML+허브 선택 시] 각 `.md`의 읽기·공유·리뷰용 HTML(원본 .md 보존). `references/html-doc-template.md`.
+  overview.html              ["둘 다" 선택 시] 도식 종합 대시보드(마인드맵·차트·인포그래픽·웹툰). `references/html-visual-template.md`.
+  (또는) index.html          ["비주얼 대시보드만" 선택 시] index.html = 도식 종합 대시보드.
 ```
 
 ### INDEX.md 생성 규칙 (모든 문서 작성 완료 후 마지막에 — g7)

@@ -38,7 +38,7 @@ STEP 5  Final integrated Evaluator pass  (4-axis rubric + 7 probes + 6 gates)
       ▼
 STEP 7  Conditional wireframe human-checkpoint  (fires only if a wireframe is present)
       ▼
-STEP 7.5  Visual HTML dashboard render  (index.html)
+STEP 7.5  HTML render per STEP 1-b choice  (per-doc HTML + hub index.html · or visual dashboard · .md always kept)
       ▼
 STEP 7.6  Importance-grouped index  (INDEX.md — tiers · work order · roles · lean set)
       ▼
@@ -91,9 +91,14 @@ A **single-source rule** is enforced: money rules (pricing, take-rate, settlemen
 
 ---
 
-## Visual HTML dashboard
+## HTML output (per-doc · dashboard)
 
-The final deliverable renders every artifact into a **self-contained, diagram-rich HTML dashboard** so the whole plan is graspable at a glance — mind map, value-loop and money-flow infographics, competitive matrix, webtoon-style persona panels, user-flow charts, IA tree, system architecture, ERD, metric gauges, scope infographic, and a backlog Gantt. Diagrams use Mermaid; infographics are inline SVG/CSS (work offline). See `references/html-visual-template.md`.
+At STEP 1 you also choose the **HTML output form** (the `.md` files are always preserved):
+
+- **Per-doc HTML + hub `index.html`** *(default)* — each `.md` is also rendered as a clean, readable, shareable, reviewable HTML page (with TOC, section anchors, print CSS), plus a hub `index.html` that navigates them by importance tier / work order / role (from `INDEX.md`). See `references/html-doc-template.md`.
+- **Both** — the above plus a diagram-rich **visual dashboard** `overview.html`.
+- **Visual dashboard only** — a single self-contained `index.html` that makes the whole plan graspable at a glance: mind map, value-loop and money-flow infographics, competitive matrix, webtoon-style persona panels, user-flow charts, IA tree, system architecture, ERD, metric gauges, scope infographic, backlog Gantt (Mermaid + inline SVG/CSS, offline-capable). See `references/html-visual-template.md`.
+- **None** — `.md` only.
 
 ---
 
@@ -134,6 +139,7 @@ service-planning-harness/
    ├─ rubric.md                      # 4 criteria, 2× weights, verdict logic
    ├─ sprint-playbook.md             # 4 research sprints + Mode 5 group expansion (g1–g6)
    ├─ mode-templates.md              # 5 output-mode document skeletons
+   ├─ html-doc-template.md           # per-doc readable HTML + hub render rules + skeleton
    └─ html-visual-template.md        # visual HTML dashboard render rules + skeleton
 ```
 

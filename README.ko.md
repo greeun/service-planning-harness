@@ -38,7 +38,7 @@ STEP 5  최종 통합 Evaluator 패스  (4축 루브릭 + 7 probe + 6 게이트)
       ▼
 STEP 7  조건부 와이어프레임 인간 체크포인트  (와이어프레임 있을 때만 발동)
       ▼
-STEP 7.5  비주얼 HTML 대시보드 렌더  (index.html)
+STEP 7.5  HTML 렌더 (STEP 1-b 선택)  (문서별 HTML + 허브 index.html · 또는 도식 대시보드 · .md 항상 보존)
       ▼
 STEP 7.6  중요도 그룹핑 길잡이  (INDEX.md — 티어 · 작업순서 · 역할별 · 최소 착수 세트)
       ▼
@@ -91,9 +91,14 @@ package/
 
 ---
 
-## 비주얼 HTML 대시보드
+## HTML 산출 (문서별 · 대시보드)
 
-최종 산출물은 모든 문서를 **자체완결 + 도식 시각화 중심 HTML 대시보드**로 렌더해, 기획 전체를 한눈에 파악하게 한다 — 마인드맵, 가치순환·자금흐름 인포그래픽, 경쟁 매트릭스, 웹툰형 페르소나 패널, 유저플로우 차트, IA 트리, 시스템 아키텍처, ERD, 지표 게이지, 범위 인포그래픽, 백로그 간트. 다이어그램은 Mermaid, 인포그래픽은 인라인 SVG/CSS(오프라인 동작). `references/html-visual-template.md` 참조.
+STEP 1에서 **HTML 산출 형태**도 함께 고른다(`.md`는 항상 보존):
+
+- **문서별 HTML + 허브 `index.html`** *(기본)* — 각 `.md`를 읽기·공유·리뷰가 쉬운 깨끗한 HTML 페이지로도 렌더(목차·섹션 앵커·인쇄 CSS)하고, 중요도 티어/작업순서/역할별로 묶어 안내하는 허브 `index.html`(`INDEX.md` 반영)을 만든다. `references/html-doc-template.md` 참조.
+- **둘 다** — 위 + 도식 종합 **비주얼 대시보드** `overview.html`.
+- **비주얼 대시보드만** — 기획 전체를 한눈에 파악하게 하는 단일 자체완결 `index.html`: 마인드맵, 가치순환·자금흐름 인포그래픽, 경쟁 매트릭스, 웹툰형 페르소나 패널, 유저플로우 차트, IA 트리, 시스템 아키텍처, ERD, 지표 게이지, 범위 인포그래픽, 백로그 간트(Mermaid + 인라인 SVG/CSS, 오프라인 동작). `references/html-visual-template.md` 참조.
+- **없음** — `.md`만.
 
 ---
 
@@ -134,6 +139,7 @@ service-planning-harness/
    ├─ rubric.md                      # 4 기준, 2× 가중, 판정 로직
    ├─ sprint-playbook.md             # 4 리서치 스프린트 + Mode 5 그룹 확장(g1~g6)
    ├─ mode-templates.md              # 5 출력 모드 문서 골격
+   ├─ html-doc-template.md           # 문서별 읽기용 HTML + 허브 렌더 규칙 + 스켈레톤
    └─ html-visual-template.md        # 비주얼 HTML 대시보드 렌더 규칙 + 스켈레톤
 ```
 
