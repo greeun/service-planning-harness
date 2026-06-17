@@ -18,7 +18,7 @@
 ## 산출 구조 (문서별 HTML + 허브)
 
 ```
-<output>/                         (Mode 5는 package/, Mode 1~4는 단일 폴더)
+docs/                         (Mode 5는 docs/, Mode 1~4는 단일 폴더)
 ├─ index.html                     허브: 문서 목록·중요도 티어·작업순서·각 문서 링크
 ├─ 00-business-model.md  / .html  원본 md 보존 + 읽기용 html (Mode 5 예)
 ├─ 01-service-plan.md    / .html

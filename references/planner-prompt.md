@@ -63,7 +63,7 @@ Output A — write to `spec.md`:
  Mode 3 (비즈니스+기획 통합): + 시장 / 경쟁 / 수익모델 비즈니스 분석 섹션.
  Mode 4 (화면·기능 명세 중심): 유저플로우 / 화면별 기능 / 데이터 구조 중심.
  Mode 5 (풀 기획 패키지): 단일 문서가 아니라 5단계 ~16종 산출물 세트. mode-templates.md의 Mode 5
-   산출물 목록·골격대로 package/ 다중 문서를 계획한다. spec의 "Structure / flow"는 16종 산출물의
+   산출물 목록·골격대로 docs/ 다중 문서를 계획한다. spec의 "Structure / flow"는 16종 산출물의
    목록·각 문서 골격·상호 추적(기능↔문제↔화면↔데이터↔API)·단일출처(돈 규칙은 00-business-model에서만)
    를 기술한다. sprint-playbook의 S4를 그룹별(g1 발견·전략 / g2 정의 / g3 설계 / g4 기술 / g5 실행)로
    확장하고, g1의 00-business-model을 가장 먼저 확정해 g4(ERD·API·정책서)가 그 위에 정합하도록 순서를
