@@ -1,2 +1,6 @@
 .DS_Store
 *.log
+
+# superpowers (auto-installed; do not track)
+.superpowers/
+docs/superpowers/

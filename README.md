@@ -40,6 +40,8 @@ STEP 7  Conditional wireframe human-checkpoint  (fires only if a wireframe is pr
       ▼
 STEP 7.5  Visual HTML dashboard render  (index.html)
       ▼
+STEP 7.6  Importance-grouped index  (INDEX.md — tiers · work order · roles · lean set)
+      ▼
 STEP 8  Deliver
 ```
 
@@ -57,7 +59,7 @@ Activation always asks which mode to produce first (STEP 1, mandatory gate):
 | 2 | **Full PRD** | + functional spec / screen definitions / edge cases / non-functional requirements. |
 | 3 | **Business + product** | + market / competition / revenue-model analysis. Expanded S1. |
 | 4 | **Screen & feature spec** | User flows / per-screen features / data structure. Heaviest S3 + wireframes. |
-| 5 | **Full planning package** | ~16 deliverables across 5 stages **+ a visual HTML dashboard** (`index.html`). |
+| 5 | **Full planning package** | ~16 deliverables across 5 stages **+ a visual HTML dashboard** (`index.html`) **+ an importance-grouped index** (`INDEX.md`). |
 
 ### Mode 5 — the full package
 
@@ -68,7 +70,8 @@ package/
 ├─ Design      20-wireframes · 21-screen-spec
 ├─ Technical   30-functional-spec · 31-erd · 32-api-spec · 33-policy
 ├─ Execution   40-backlog · 41-qa-testcases
-└─ Final read  index.html   (mind map · flowcharts · architecture · ERD · charts · infographics · webtoon panels)
+├─ Final read  index.html   (mind map · flowcharts · architecture · ERD · charts · infographics · webtoon panels)
+└─ Guide       INDEX.md     (importance tiers · work order · per-role bundles · minimal start set)
 ```
 
 A **single-source rule** is enforced: money rules (pricing, take-rate, settlement triggers) are defined only in `00-business-model.md`; ERD, API, and policy docs reference it and never redefine.
@@ -91,6 +94,19 @@ A **single-source rule** is enforced: money rules (pricing, take-rate, settlemen
 ## Visual HTML dashboard
 
 The final deliverable renders every artifact into a **self-contained, diagram-rich HTML dashboard** so the whole plan is graspable at a glance — mind map, value-loop and money-flow infographics, competitive matrix, webtoon-style persona panels, user-flow charts, IA tree, system architecture, ERD, metric gauges, scope infographic, and a backlog Gantt. Diagrams use Mermaid; infographics are inline SVG/CSS (work offline). See `references/html-visual-template.md`.
+
+---
+
+## Importance grouping (INDEX.md)
+
+Not every project needs all 16 docs. After the package is written, Mode 5 emits `INDEX.md` — a guide that classifies the deliverables instead of dumping them:
+
+- **Importance tiers** — T1 *must-have* (can't start dev without them) / T2 *conditional* (required by domain — e.g. `33-policy`, `00-business-model` for payment/regulated services) / T3 *supporting* (alignment, pitch, onboarding). Tiers are judged per-service, not fixed.
+- **Work order** — dependency-based reading/build sequence (money rules first → why/who → what → screens → data/API → execution → visual summary).
+- **Per-role bundles** — developer / QA / designer / PO / leadership each get the subset they actually read.
+- **Minimal start set** — the lean ~6 docs (`10-prd` · `13-user-flows` · `21-screen-spec` · `31-erd` · `32-api-spec` · `40-backlog`) sufficient to begin building; the full 16 are for kickoff alignment, client handoff, or regulated domains.
+
+This keeps the package from becoming documentation theater — it tells the reader *what to read first, and who reads what*.
 
 ---
 

@@ -87,8 +87,11 @@ S4 완료 후, `Agent` 콜로 Evaluator(Mode B)를 디스패치해 통합 `servi
 ### STEP 7.5 — 비주얼 HTML 렌더 (최종 읽기 문서)
 PASS된 최종 산출물을 `references/html-visual-template.md`에 따라 **도식 시각화 중심 자체완결 HTML 대시보드**로 렌더한다. Mode 1~4 → `<service>-plan.html`, Mode 5 → `package/index.html`. 시각화 카탈로그(마인드맵·가치순환·자금흐름·경쟁매트릭스·페르소나 웹툰·유저플로우·IA트리·아키텍처·ERD·지표차트·범위 인포그래픽·간트 등)에서 해당 모드에 맞는 것을 **실제 데이터로** 채운다. HTML은 새 내용 생성 금지 — 기존 산출물의 구조·수치·관계만 시각화(돈 규칙은 단일출처 인용). 와이어프레임/시각 craft가 포함되면 STEP 7 인간 체크포인트 통과 후 렌더.
 
+### STEP 7.6 — 중요도 그룹핑·순서 길잡이 (Mode 5, 모든 문서 작성 후)
+Mode 5에서 모든 산출물(16종 + `index.html`) 완성 후 **마지막으로 `INDEX.md`를 생성**한다(`references/mode-templates.md` "INDEX.md 생성 규칙", sprint-playbook S4-g7). 포함: ① 중요도 3티어(T1 필수 / T2 조건부 / T3 보조, 도메인 맞춤 판정) ② 작업 순서(의존성 기반) ③ 역할별 묶음(개발/QA/디자이너/기획/경영) ④ 최소 착수 세트(Lean 6종). 문서를 위한 문서가 되지 않게 — 실제 필요도로 분류·정렬만 하고 신규 내용 생성 금지.
+
 ### STEP 8 — 산출/종료
-최종 `service-plan.md`(Mode 5는 `package/` 16종 + `index.html`)를 사용자에게 전달한다. `DEADLOCK` 발생 시 양측 입장을 요약해 사용자 판단을 요청한다.
+최종 `service-plan.md`(Mode 5는 `package/` 16종 + `index.html` + `INDEX.md`)를 사용자에게 전달한다. `DEADLOCK` 발생 시 양측 입장을 요약해 사용자 판단을 요청한다.
 
 ### 사용자 확인 게이트 요약
 (a) STEP 1 모드 확정 전 생성 금지; (b) STEP 4a 계약 미승인 시 빌드 금지; (c) STEP 7 와이어프레임 포함 시 사용자 승인 전 PASS 확정 금지; (d) cap 도달 시 미해결 이슈 투명 보고.
