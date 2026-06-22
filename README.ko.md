@@ -12,9 +12,10 @@ Anthropic의 *Harness Design for Long-Running Application Development*의 Planne
 
 그냥 "기획서 써줘"라고 하면 LLM은 자신감 있고 구조적으로는 완결돼 보이지만 얕은 산출물을 낸다 — 차별점은 "더 편리/더 빠름"으로 뭉개지고, 범위는 "전부 다 만들자"로 부풀고, 성공지표는 "만족도 향상"으로 끝난다. 이 스킬은 반대로 강제한다:
 
-- **합성 전에 리서치를 게이트한다.** 4개 리서치 스프린트(시장 → 문제 → UX → 통합)가 각각 적대적 Evaluator를 통과한 **뒤에만** 그 위에 기획서를 쌓는다.
+- **합성 전에 리서치를 게이트한다.** 4개 리서치 스프린트(시장·생태계 → 문제 → UX → 통합)가 각각 적대적 Evaluator를 통과한 **뒤에만** 그 위에 기획서를 쌓는다.
 - **Claude 약점축에 2× 가중.** 압박 없으면 Claude가 약한 차별화·실행가능성이 루브릭을 지배한다.
-- **모든 주장이 검증 가능.** 6개 이진 게이트(기능↔문제 추적 · 페르소나 구체성 · 실명 경쟁 비교 · 지표 측정성 · MVP/비범위 분리 · 자리표시자 0)가 전부 통과해야 한다.
+- **모든 주장이 검증 가능.** 7개 이진 게이트(기능↔문제 추적 · 페르소나 구체성 · 실명 경쟁 비교 · 지표 측정성 · MVP/비범위 분리 · 자리표시자 0 · 인포그래픽 적합성)가 전부 통과해야 한다.
+- **인포그래픽 우선 + 생태계 관점.** 구조를 가진 모든 내용은 텍스트 벽이 아니라 개념별 최적 도식(마인드맵·순서도·시퀀스·ERD·간트·생태계맵·비교매트릭스·여정맵·웹툰, 또는 주제 전용 발명 시각화)으로 — md는 ASCII/매트릭스, HTML은 **인라인 SVG/CSS 인포그래픽**, 가능 시 생성 이미지(Mermaid 등 외부 렌더러 비사용). 서비스 분석은 단일 경쟁자가 아니라 **생태계(가치 네트워크)와 참여자 전체**를 생태계 맵으로 서술한다.
 
 ---
 
@@ -33,12 +34,12 @@ STEP 4  4개 리서치 스프린트 (각: 계약 → 빌드 → 평가, cap 5~15
       │   S3 UX/UI 플로우·화면 → research-s3.md
       │   S4 통합 → service-plan.md  (Mode 5: 그룹 g1~g6 → package/)
       ▼
-STEP 5  최종 통합 Evaluator 패스  (4축 루브릭 + 7 probe + 6 게이트)
+STEP 5  최종 통합 Evaluator 패스  (4축 루브릭 + 8 probe + 7 게이트)
       │
       ▼
 STEP 7  조건부 와이어프레임 인간 체크포인트  (와이어프레임 있을 때만 발동)
       ▼
-STEP 7.5  HTML 렌더 (STEP 1-b 선택)  (문서별 HTML + 허브 index.html · 또는 도식 대시보드 · .md 항상 보존)
+STEP 7.5  HTML 렌더 (STEP 1-b 선택, 기본='둘 다')  (문서별 HTML[ASCII+인라인 SVG 인포그래픽+생성 이미지] + 허브 + 도식 대시보드 · .md 항상 보존)
       ▼
 STEP 7.6  중요도 그룹핑 길잡이  (INDEX.md — 티어 · 작업순서 · 역할별 · 최소 착수 세트)
       ▼
@@ -57,7 +58,7 @@ Generator와 Evaluator는 서로의 추론을 보지 못한다 — 오직 파일
 |------|------|--------|
 | 1 | **Lean MVP 기획서** *(기본)* | 문제 → 타겟 → 핵심기능 → 유저플로우 → MVP범위 → 지표. 약 4주 착수 가능. S3 라이트, 와이어프레임 없음. |
 | 2 | **정식 PRD** | + 기능명세 / 화면정의 / 엣지케이스 / 비기능요구. |
-| 3 | **비즈니스+기획 통합** | + 시장 / 경쟁 / 수익모델 분석. S1 확장. |
+| 3 | **비즈니스+기획 통합** | + 시장 / 경쟁 / 생태계 / 수익모델 분석. S1 확장. |
 | 4 | **화면·기능 명세 중심** | 유저플로우 / 화면별 기능 / 데이터 구조. S3 최중량 + 와이어프레임. |
 | 5 | **풀 기획 패키지** | 5단계 ~16종 산출물 **+ 비주얼 HTML 대시보드**(`index.html`) **+ 중요도 그룹핑 길잡이**(`INDEX.md`). |
 
@@ -70,7 +71,7 @@ package/
 ├─ 설계        20-wireframes · 21-screen-spec
 ├─ 기술        30-functional-spec · 31-erd · 32-api-spec · 33-policy
 ├─ 실행        40-backlog · 41-qa-testcases
-├─ 최종 읽기    index.html   (마인드맵 · 순서도 · 아키텍처 · ERD · 차트 · 인포그래픽 · 웹툰 패널)
+├─ 최종 읽기    index.html   (마인드맵 · 생태계맵 · 순서도 · 시퀀스 · ERD · 간트 · 차트 · 인포그래픽 · 웹툰 — 전부 인라인 SVG/CSS + 가능 시 생성 이미지)
 └─ 길잡이       INDEX.md     (중요도 티어 · 작업순서 · 역할별 묶음 · 최소 착수 세트)
 ```
 
@@ -87,18 +88,18 @@ package/
 | C3 | **실행가능성(MVP범위)** | **2×** | Claude는 과대범위로 흐름; MVP/비범위 명시 분리 필요. |
 | C4 | 성공지표 측정가능성 | 1× | 섹션 골격은 기본 적정; 측정성 게이트로 보강. |
 
-**판정:** 모든 기준 ≥4, 적대적 probe 전부 clean, §8 6게이트 전부 통과 → **PASS**. 2×축 중 하나라도 <4 → **FAIL**. 채점은 `references/evaluator-calibration.md`의 구체적 1/3/5 few-shot 앵커로 보정한다.
+**판정:** 모든 기준 ≥4, 적대적 probe 전부 clean, §8 7게이트 전부 통과 → **PASS**. 2×축 중 하나라도 <4 → **FAIL**. 채점은 `references/evaluator-calibration.md`의 구체적 1/3/5 few-shot 앵커로 보정한다.
 
 ---
 
 ## HTML 산출 (문서별 · 대시보드)
 
-STEP 1에서 **HTML 산출 형태**도 함께 고른다(`.md`는 항상 보존):
+STEP 1에서 **HTML 산출 형태**도 함께 고른다(`.md`는 항상 보존; 인포그래픽 우선이라 도식 대시보드를 기본 포함):
 
-- **문서별 HTML + 허브 `index.html`** *(기본)* — 각 `.md`를 읽기·공유·리뷰가 쉬운 깨끗한 HTML 페이지로도 렌더(목차·섹션 앵커·인쇄 CSS)하고, 중요도 티어/작업순서/역할별로 묶어 안내하는 허브 `index.html`(`INDEX.md` 반영)을 만든다. `references/html-doc-template.md` 참조.
-- **둘 다** — 위 + 도식 종합 **비주얼 대시보드** `overview.html`.
-- **비주얼 대시보드만** — 기획 전체를 한눈에 파악하게 하는 단일 자체완결 `index.html`: 마인드맵, 가치순환·자금흐름 인포그래픽, 경쟁 매트릭스, 웹툰형 페르소나 패널, 유저플로우 차트, IA 트리, 시스템 아키텍처, ERD, 지표 게이지, 범위 인포그래픽, 백로그 간트(Mermaid + 인라인 SVG/CSS, 오프라인 동작). `references/html-visual-template.md` 참조.
-- **없음** — `.md`만.
+- **둘 다 (문서별 HTML + 도식 대시보드)** *(기본)* — 각 `.md`를 읽기·공유·리뷰가 쉬운 깨끗한 HTML 페이지로 렌더(목차·섹션 앵커·인쇄 CSS, ASCII 도식 보존 + md 데이터를 **인라인 SVG/CSS 인포그래픽**으로 승급 + 생성 이미지)하고, 허브 `index.html`(`INDEX.md` 반영) + 도식 종합 **비주얼 대시보드** `overview.html`을 만든다. `references/html-doc-template.md` · `references/html-visual-template.md` 참조.
+- **비주얼 대시보드만** — 기획 전체를 한눈에 파악하게 하는 단일 자체완결 `index.html`: 마인드맵, 생태계맵, 가치순환·자금흐름 인포그래픽, 경쟁 매트릭스, 웹툰형 페르소나 패널, 유저플로우·시퀀스, IA 트리, 시스템 아키텍처, ERD, 지표 게이지, 범위 인포그래픽, 백로그 간트 — **전부 인라인 SVG/CSS + 가능 시 생성 이미지, 외부 의존 0**(Mermaid 비사용, 완전 오프라인). `references/html-visual-template.md` 참조.
+- **문서별 HTML만** — 위 "둘 다"에서 도식 종합 대시보드만 생략.
+- **없음** — `.md`만(단 md 본문의 ASCII 도식·매트릭스·가능 시 생성 이미지는 항상 내장).
 
 ---
 
@@ -134,7 +135,7 @@ service-planning-harness/
 └─ references/
    ├─ planner-prompt.md              # Planner: 모드 선택 + spec/sprint-playbook 작성
    ├─ generator-prompt.md            # Generator: 스프린트별 계약 → 빌드 → self-verify
-   ├─ evaluator-prompt.md            # Evaluator: 스프린트별 + 최종 패스, 7 적대적 probe
+   ├─ evaluator-prompt.md            # Evaluator: 스프린트별 + 최종 패스, 8 적대적 probe
    ├─ evaluator-calibration.md       # C1~C4 few-shot 1/3/5 앵커
    ├─ rubric.md                      # 4 기준, 2× 가중, 판정 로직
    ├─ sprint-playbook.md             # 4 리서치 스프린트 + Mode 5 그룹 확장(g1~g6)
@@ -162,7 +163,7 @@ service-planning-harness/
 
 ## 예시 실행
 
-**character-market**(AI 캐릭터 + 창작자 직접 업로드 양면 마켓플레이스)에 Mode 1 → Mode 5로 종단 테스트했다. 4개 리서치 스프린트와 최종 통합 패스 모두 **PASS**(C1 5 · C2 5 · C3 5 · C4 4; 6게이트 전부 통과). 풀 패키지(16종 + 비주얼 대시보드)는 프로젝트의 `planning/package/`에 있다.
+**character-market**(AI 캐릭터 + 창작자 직접 업로드 양면 마켓플레이스)에 Mode 1 → Mode 5로 종단 테스트했다. 4개 리서치 스프린트와 최종 통합 패스 모두 **PASS**(C1 5 · C2 5 · C3 5 · C4 4; 당시 게이트 전부 통과). 풀 패키지(16종 + 비주얼 대시보드)는 프로젝트의 `planning/package/`에 있다. *(주: 이 인스턴스는 인포그래픽 우선·생태계·G-g 도입 전 버전 — 시각화는 신규 방침의 인라인 SVG/CSS로 갱신 필요.)*
 
 ---
 

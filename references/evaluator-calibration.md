@@ -1,40 +1,40 @@
 # Evaluator Calibration — service-planning-harness
 
-> Few-shot 채점 보정 앵커. Evaluator는 채점 전 이 파일을 읽고 각 기준의 1/3/5 점을 이 앵커에 정렬시킨다. 이렇게 하면 채점이 까다로운 시니어 PM / 기획 리드의 판단에 맞춰지고, 라운드 간 score drift가 줄어든다.
-> 앵커는 한국어 서비스 기획 도메인의 구체 예시다. **변경 금지** — 그대로 적용한다.
-> 운영 튜닝(critique 로그를 읽고 누락 패턴을 반례로 추가)은 SKILL.md "Evaluator tuning workflow (a)–(d)" 절차를 따른다. 거기서 새 반례를 추가할 때 이 파일을 갱신한다.
+> Few-shot scoring calibration anchors. Before scoring, the Evaluator reads this file and aligns each criterion's 1/3/5 score to these anchors. This aligns scoring with the judgment of a demanding senior PM / planning lead and reduces score drift between rounds.
+> The anchors are concrete examples from the Korean service-planning domain. **Do not change** — apply them as-is.
+> Operational tuning (read the critique log, add missing patterns as counterexamples) follows the SKILL.md "Evaluator tuning workflow (a)–(d)" procedure. Update this file when adding a new counterexample there.
 
 ---
 
-## C1 문제정의 명확성
+## C1 problem-definition clarity
 
-- **1/5**: "직장인을 위한 일정관리 앱. 사람들이 일정 관리를 어려워한다." — 누구/왜가 추상적, 페르소나·상황 없음.
-- **3/5**: "프리랜서 디자이너가 여러 클라이언트의 마감을 한 곳에서 못 봐서 마감을 놓친다." — 타겟·문제는 명확하나 페인포인트의 빈도/맥락이 얕음.
-- **5/5**: "주 3개 이상 동시 프로젝트를 진행하는 프리랜서 디자이너(예: 만 32세 김OO)는 카톡·이메일·노션에 흩어진 마감을 매일 수동 취합하다 월 2회꼴로 마감을 놓쳐 재작업·신뢰 손실을 겪는다." — 페르소나·상황·빈도·결과까지 날카로움.
+- **1/5**: "A scheduling app for office workers. People find managing their schedules hard." ("직장인을 위한 일정관리 앱. 사람들이 일정 관리를 어려워한다.") — who/why is abstract, no persona or situation.
+- **3/5**: "A freelance designer can't see deadlines for multiple clients in one place and misses deadlines." ("프리랜서 디자이너가 여러 클라이언트의 마감을 한 곳에서 못 봐서 마감을 놓친다.") — target and problem are clear, but the frequency/context of the pain point is shallow.
+- **5/5**: "A freelance designer running 3+ simultaneous projects per week (e.g., Kim, age 32) manually collects deadlines scattered across KakaoTalk, email, and Notion every day, and misses a deadline about twice a month, causing rework and loss of trust." ("주 3개 이상 동시 프로젝트를 진행하는 프리랜서 디자이너(예: 만 32세 김OO)는 카톡·이메일·노션에 흩어진 마감을 매일 수동 취합하다 월 2회꼴로 마감을 놓쳐 재작업·신뢰 손실을 겪는다.") — sharp down to persona, situation, frequency, and consequence.
 
-## C2 차별화·독창성
+## C2 differentiation/originality
 
-- **1/5**: "기존 서비스보다 더 편리하고 빠릅니다." — 경쟁자 미특정, 차별축 없음(table-stakes 일반론).
-- **3/5**: "노션·트렐로 대비 마감 자동 취합 기능이 있다." — 경쟁자는 명시했으나 비교축이 단일하고 모방 난이도 논거 없음.
-- **5/5**: "노션(범용 워크스페이스, 마감 자동집계 없음)·트렐로(보드 중심, 외부 채널 연동 없음) 대비, 카톡·이메일·노션 마감을 자동 파싱해 단일 캘린더로 통합하는 것이 핵심 차별점이며, 이 파싱 파이프라인이 6개월 선점 해자가 된다." — 복수 경쟁자·비교축·해자 논거.
+- **1/5**: "More convenient and faster than existing services." ("기존 서비스보다 더 편리하고 빠릅니다.") — no competitor named, no differentiation axis (table-stakes generality).
+- **3/5**: "It has an automatic deadline-aggregation feature compared to Notion/Trello." ("노션·트렐로 대비 마감 자동 취합 기능이 있다.") — names competitors but the comparison axis is single and there's no argument about imitation difficulty.
+- **5/5**: "Compared to Notion (general-purpose workspace, no automatic deadline aggregation) and Trello (board-centric, no external-channel integration), the core differentiator is automatically parsing deadlines from KakaoTalk, email, and Notion into a single calendar, and this parsing pipeline becomes a 6-month head-start moat." ("노션(범용 워크스페이스, 마감 자동집계 없음)·트렐로(보드 중심, 외부 채널 연동 없음) 대비, 카톡·이메일·노션 마감을 자동 파싱해 단일 캘린더로 통합하는 것이 핵심 차별점이며, 이 파싱 파이프라인이 6개월 선점 해자가 된다.") — multiple competitors, comparison axes, moat argument.
 
-## C3 실행가능성(MVP범위)
+## C3 feasibility (MVP scope)
 
-- **1/5**: "1차로 모든 기능을 다 구현한다." — 우선순위·범위 분리 없음, 착수 불가.
-- **3/5**: "MVP는 마감 등록과 캘린더 뷰. 이후 자동 파싱 추가." — 범위는 좁혔으나 out-of-scope가 모호하고 우선순위 근거 약함.
-- **5/5**: "MVP(4주): 수동 마감 등록 + 통합 캘린더 뷰 + 마감 D-1 알림. Out-of-scope(명시 제외): 자동 파싱·팀 협업·결제. 자동 파싱은 핵심 차별점이나 기술 리스크가 커 MVP 검증 후 2차로 분리." — 범위/비범위 명시, 우선순위 근거, 착수 가능.
+- **1/5**: "Implement all features in the first phase." ("1차로 모든 기능을 다 구현한다.") — no prioritization or scope separation, not startable.
+- **3/5**: "MVP is deadline registration and a calendar view. Add automatic parsing later." ("MVP는 마감 등록과 캘린더 뷰. 이후 자동 파싱 추가.") — scope is narrowed, but out-of-scope is vague and the prioritization rationale is weak.
+- **5/5**: "MVP (4 weeks): manual deadline registration + integrated calendar view + D-1 deadline alert. Out-of-scope (explicitly excluded): automatic parsing, team collaboration, payments. Automatic parsing is the core differentiator but carries high technical risk, so it is split into phase 2 after MVP validation." ("MVP(4주): 수동 마감 등록 + 통합 캘린더 뷰 + 마감 D-1 알림. Out-of-scope(명시 제외): 자동 파싱·팀 협업·결제. 자동 파싱은 핵심 차별점이나 기술 리스크가 커 MVP 검증 후 2차로 분리.") — explicit scope/out-of-scope, prioritization rationale, startable.
 
-## C4 성공지표 측정가능성
+## C4 success-metric measurability
 
-- **1/5**: "사용자 만족도를 높인다." — 측정 수치·방법 없음.
-- **3/5**: "출시 후 MAU 1,000 달성." — 수치는 있으나 측정방법/기간/판별 기준이 불완전.
-- **5/5**: "출시 8주 내 주간 리텐션(W4) 25% 이상(앰플리튜드 코호트 측정), 마감 미스율 사용자당 월 2회→0.5회 감소(인앱 설문 N=50, 사전·사후 비교)." — 수치+측정도구+기간+판별 기준.
+- **1/5**: "Increase user satisfaction." ("사용자 만족도를 높인다.") — no measurement number or method.
+- **3/5**: "Reach 1,000 MAU after launch." ("출시 후 MAU 1,000 달성.") — has a number but the measurement method/period/criterion is incomplete.
+- **5/5**: "Within 8 weeks of launch, weekly retention (W4) of 25%+ (measured via Amplitude cohorts); reduce deadline-miss rate per user from 2/month to 0.5/month (in-app survey N=50, pre/post comparison)." ("출시 8주 내 주간 리텐션(W4) 25% 이상(앰플리튜드 코호트 측정), 마감 미스율 사용자당 월 2회→0.5회 감소(인앱 설문 N=50, 사전·사후 비교).") — number + measurement tool + period + criterion.
 
 ---
 
-## 사용 규칙
+## Usage rules
 
-- 각 기준 채점 시 산출물의 해당 부분을 위 1/3/5 앵커와 **직접 대조**한다. "이 페르소나는 C1 3/5 앵커보다 낫나, 5/5 앵커만큼 날카롭나?" 식으로.
-- 앵커 사이값(2/4)은 인접 앵커의 어느 쪽에 더 가까운지로 정한다.
-- 모든 축이 ≥4로 보이면 rubric.md "보정 체크포인트"(도메인 전문가/경쟁자/사용자 렌즈)를 적용한 뒤에만 PASS를 고려한다.
-- 새 실패 패턴(예: 측정 가능해 보이지만 판별 기준이 빠진 지표를 3/5로 과대평가)을 발견하면 SKILL.md tuning (c)에 따라 이 파일에 반례를 추가한다.
+- When scoring each criterion, **directly compare** the relevant part of the deliverable against the 1/3/5 anchors above. As in: "Is this persona better than the C1 3/5 anchor, as sharp as the 5/5 anchor?"
+- For in-between values (2/4), decide by which adjacent anchor it is closer to.
+- If every axis looks ≥4, consider PASS only after applying rubric.md "Calibration Checkpoint" (domain-expert/competitor/user lenses).
+- When you find a new failure pattern (e.g., overrating a metric that looks measurable but lacks a discrimination criterion at 3/5), add a counterexample to this file per SKILL.md tuning (c).

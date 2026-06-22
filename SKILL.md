@@ -1,142 +1,152 @@
 ---
 name: service-planning-harness
-description: 짧은 서비스 아이디어나 요구사항을 받아 **개발 착수 가능한 서비스 기획서(또는 전체 기획 산출물 패키지)**를 산출하는 **3-에이전트 GAN 하니스 스킬**(Planner→Generator→Evaluator, Full tier). 활성화 시 5가지 산출물 모드(Lean MVP 기획서 / 정식 PRD / 비즈니스+기획 통합 / 화면·기능 명세 중심 / 풀 기획 패키지) 중 하나를 먼저 선택하게 한 뒤, 4개 리서치 스프린트(S1 시장·경쟁 리서치 → S2 문제·타겟 → S3 UX/UI 플로우 → S4 기획서 통합작성)를 스프린트별 계약·품질게이트로 진행하며 선택 모드에 맞춰 문서 구조를 조정해 생성하고, 별도 Evaluator가 스프린트별 + 최종 4축 루브릭으로 적대적 검증한다. 풀 기획 패키지(Mode 5)는 5단계 ~16종 산출물(기획서·PRD·IA·유저플로우·화면설계서·기능명세·ERD·API명세·정책서·백로그·QA 등)을 한 번에 생성한다. 다음과 같이 요청할 때 사용: "서비스 기획", "기획서 작성", "서비스 기획서", "PRD 작성", "MVP 기획", "제품 기획", "서비스 기획 스킬", "화면 명세 작성", "전체 기획 산출물", "기획 패키지"; English: "service planning", "write PRD", "product spec", "MVP plan", "full planning package". (트리거 14개: 한국어 10 + 영어 5.)
+description: A **3-agent GAN harness skill** (Planner→Generator→Evaluator, Full tier) that takes a short service idea or set of requirements and produces a **development-ready service-planning document (or a full planning-deliverable package)**. On activation it first has the user pick one of 5 output modes (Lean MVP plan / Full PRD / Business+planning combined / Screen·feature-spec focused / Full planning package), then runs 4 research sprints (S1 market·competition research → S2 problem·target → S3 UX/UI flows → S4 plan integration) with per-sprint contracts and quality gates, adapting the document structure to the chosen mode, while a separate Evaluator adversarially verifies each sprint + a final 4-axis rubric. The full planning package (Mode 5) generates a 5-stage ~16-deliverable set (plan·PRD·IA·user flows·screen spec·functional spec·ERD·API spec·policy·backlog·QA, etc.) in one pass. **Infographic-first**: every deliverable conveys structure through the best-fit visual (mind map·flowchart·sequence·state diagram·ERD·Gantt·comparison matrix·chart·journey map·ecosystem map·infographic·webtoon — or a topic-specific visualization invented when no standard diagram fits) rather than a wall of text — embedded as ASCII diagrams·matrices in the `.md` body and as data-driven **inline SVG/CSS infographics** in the HTML output, with a diagram-rich HTML dashboard produced by default (self-contained·offline — external-renderer diagrams such as Mermaid are discouraged). Use when asked: "서비스 기획", "기획서 작성", "서비스 기획서", "PRD 작성", "MVP 기획", "제품 기획", "서비스 기획 스킬", "화면 명세 작성", "전체 기획 산출물", "기획 패키지"; English: "service planning", "write PRD", "product spec", "MVP plan", "full planning package". (14 triggers: 10 Korean + 5 English. Skill instructions are English; the generated deliverable's language is user-selectable at STEP 1-c, default Korean.)
 ---
 
-# Service Planning Harness (서비스 기획 하니스)
+# Service Planning Harness
 
-짧은 서비스 아이디어(1–4문장)를 받아, 엔지니어링 팀이 바로 착수할 수 있는 **서비스 기획서(service-planning document)**를 산출하는 GAN 스타일 3-에이전트 하니스다. Planner → Generator → Evaluator를 각각 별도의 `Agent` 콜로 디스패치한다(GAN anti-omission-bias). **Full tier**: 4개 리서치 스프린트를 스프린트별 계약 협상 + 품질 게이트로 진행하고, 스프린트별 + 최종 통합 Evaluator 패스를 돌린다.
+A GAN-style 3-agent harness that takes a short service idea (1–4 sentences) and produces a **service-planning document** an engineering team can start from immediately. Planner → Generator → Evaluator are each dispatched as separate `Agent` calls (GAN anti-omission-bias). **Full tier**: it runs 4 research sprints with per-sprint contract negotiation + quality gates, and runs per-sprint + a final integrated Evaluator pass.
 
-## 핵심 설계 의도 (왜 Full tier인가)
+> Skill-authoring language is English. The **generated deliverable** is written in the user-selected output language (STEP 1-c; default Korean). Korean trigger phrases are intentional — the skill must still activate on Korean requests.
 
-서비스 기획은 **리서치-페이즈 분해 + 페이즈별 품질 게이팅**을 요구한다. 약한 시장조사/문제정의 위에 기획서를 쌓으면 차별화(C2)·실행가능성(C3)이 구조적으로 무너진다. 그래서 S1–S3 리서치를 Evaluator가 게이트로 통과시킨 **뒤에만** S4가 기획서를 합성한다. 이 게이팅은 컨텍스트 완화가 목적이 아니라 직교적 품질 메커니즘이다. (모델 가이던스 절 참조 — Opus 4.8은 컨텍스트 불안이 사실상 없지만 Full을 의도적으로 선택했다.)
+## Core design intent (why Full tier)
 
-## 참조 파일 (references/)
+Service planning requires **research-phase decomposition + per-phase quality gating**. Stacking a plan on top of weak market research / problem definition makes differentiation (C2) and feasibility (C3) collapse structurally. So S4 synthesizes the plan **only after** the Evaluator passes the S1–S3 research through gates. This gating is not for context relief — it is an orthogonal quality mechanism. (See the model-guidance section — Opus 4.8 has effectively no context anxiety, yet Full was chosen deliberately.)
 
-| 파일 | 역할 |
+## Reference files (references/)
+
+| File | Role |
 |------|------|
-| `references/planner-prompt.md` | Planner 프롬프트 — 4-모드 선택 처리 + spec.md/sprint-playbook.md 작성 |
-| `references/generator-prompt.md` | Generator 프롬프트 — 스프린트별 계약 협상 + 산출 + self-verify |
-| `references/evaluator-prompt.md` | Evaluator 프롬프트 — 스프린트별 + 최종 패스, 7 probe, 판정 로직 |
-| `references/rubric.md` | 4 기준(C1–C4), 가중(C2/C3 2×), 정당화, 판정 로직 |
-| `references/evaluator-calibration.md` | few-shot 1/3/5 앵커 (C1–C4) — 채점 보정 |
-| `references/sprint-playbook.md` | 4-스프린트 계획, deliverable, 모드 적응 범위, 관측가능 체크 |
-| `references/mode-templates.md` | 5 출력 모드의 문서 구조 스켈레톤 (Mode 5 풀패키지 16종 포함) |
-| `references/html-doc-template.md` | 각 산출물 `.md`를 읽기·공유·리뷰용 HTML로 + 허브 `index.html`(중요도·순서·역할별 네비). md 보존. STEP 1-b 기본 |
-| `references/html-visual-template.md` | 최종 산출물을 도식 시각화 중심 자체완결 HTML 대시보드로 렌더(마인드맵·다이어그램·순서도·아키텍처·차트·인포그래픽·웹툰). "둘 다"의 overview.html / "대시보드만"의 index.html |
+| `references/planner-prompt.md` | Planner prompt — handle mode selection + write spec.md/sprint-playbook.md |
+| `references/generator-prompt.md` | Generator prompt — per-sprint contract negotiation + production + self-verify |
+| `references/evaluator-prompt.md` | Evaluator prompt — per-sprint + final pass, 8 probes, verdict logic |
+| `references/rubric.md` | 4 criteria (C1–C4), weights (C2/C3 2×), justification, verdict logic |
+| `references/evaluator-calibration.md` | few-shot 1/3/5 anchors (C1–C4) — scoring calibration |
+| `references/sprint-playbook.md` | 4-sprint plan, deliverables, mode-adapted scope, observable checks |
+| `references/mode-templates.md` | document-structure skeletons for the 5 output modes (incl. Mode 5 full-package 16 deliverables) |
+| `references/html-doc-template.md` | render each deliverable `.md` as readable/shareable/reviewable HTML + hub `index.html` (nav by importance·order·role). ASCII preserved + inline SVG infographics + generated images (no external-renderer dependency). md preserved. Included in the STEP 1-b default ("Both") |
+| `references/html-visual-template.md` | render the final deliverables as a self-contained, diagram-rich HTML dashboard (mind map·diagrams·flowcharts·sequence·ecosystem map·architecture·charts·infographics·webtoon + topic-specific invented visualizations), all **inline SVG/CSS + generated images where available** (Mermaid discouraged). The `overview.html` of the default "Both" / the `index.html` of "Dashboard only" |
 
-## 4개 산출물 모드
+## 5 output modes
 
-| 모드 | 이름 | 요지 |
+| Mode | Name | Gist |
 |------|------|------|
-| 1 | Lean MVP 기획서 [기본/권장] | 4주 착수 가능한 최소 기획서. S3 라이트, 와이어프레임 없음. |
-| 2 | 정식 PRD | + 기능명세 / 화면정의 / 엣지케이스 / 비기능요구. |
-| 3 | 비즈니스+기획 통합 | + 시장 / 경쟁 / 수익모델 분석. S1 확장. |
-| 4 | 화면·기능 명세 중심 | 유저플로우 / 화면별 기능 / 데이터 구조 중심. S3 최중량 + 와이어프레임. |
-| 5 | 풀 기획 패키지 | 5단계 ~16종 산출물 세트(발견·정의·설계·기술·실행) + **최종 비주얼 HTML 대시보드(`index.html`)**. S1~S3 리서치 후 S4가 다중 문서 생성(g1~g6)으로 확장. 단일 service-plan.md가 아니라 `docs/` 디렉터리에 번호 매긴 문서 묶음 + 도식 시각화 HTML 산출. |
+| 1 | Lean MVP plan [default/recommended] | Minimal plan buildable in ~4 weeks. Light S3, no wireframes. |
+| 2 | Full PRD | + functional spec / screen definitions / edge cases / non-functional requirements. |
+| 3 | Business + planning combined | + market / competition / ecosystem / revenue-model analysis. Expanded S1. |
+| 4 | Screen·feature-spec focused | Centered on user flows / per-screen features / data structures. Heaviest S3 + wireframes. |
+| 5 | Full planning package | A 5-stage ~16-deliverable set (discovery·definition·design·technical·execution) + a **final visual HTML dashboard (`index.html`)**. After S1–S3 research, S4 expands into multi-document generation (g1~g6). Not a single service-plan.md but a numbered document set under `docs/` + diagram-rich visualization HTML. |
 
-상세 섹션 구조는 `references/mode-templates.md`. Mode 5의 산출물 목록·문서 골격도 거기 정의.
+For detailed section structures see `references/mode-templates.md`. Mode 5's deliverable list and document skeletons are defined there too.
 
-## 4개 리서치 스프린트 (고정, 범위 가변)
+## 4 research sprints (fixed, scope variable)
 
-| 스프린트 | 이름 | deliverable | feeds | 모드 적응 |
-|----------|------|-------------|-------|-----------|
-| S1 | 자료조사/시장·경쟁 | `research-s1.md` | C2, G-c | Mode 3 확장(시장/수익모델); 그 외 최소 1개 경쟁 명시 |
-| S2 | 문제·타겟·페르소나 | `research-s2.md` | C1, G-a/G-b | Mode 1 린(1 페르소나); 그 외 복수 가능 |
-| S3 | UX/UI 플로우·화면 | `research-s3.md` | P-1, G-a | Mode 1 라이트(와이어프레임 없음); Mode 4 최중량 |
-| S4 | 기획서 통합작성 | `service-plan.md` | C3, G-a/G-d/G-e | S1–S3을 선택 모드 구조로 통합 (신규 리서치 없음) |
+| Sprint | Name | Deliverable | Feeds | Mode adaptation |
+|--------|------|-------------|-------|-----------------|
+| S1 | research / market·competition·ecosystem | `research-s1.md` | C2, G-c/G-g | ecosystem+participant description·ecosystem map always included; Mode 3 expanded (market/revenue model); otherwise at least 1 named competitor |
+| S2 | problem·target·persona | `research-s2.md` | C1, G-a/G-b | Mode 1 lean (1 persona); others may have multiple |
+| S3 | UX/UI flows·screens | `research-s3.md` | P-1, G-a/G-g | Mode 1 light (no wireframes); Mode 4 heaviest |
+| S4 | plan integration | `service-plan.md` | C3, G-a/G-d/G-e/G-g | integrate S1–S3 into the chosen mode's structure (no new research) |
 
-4개 스프린트는 **항상** 실행되고, 각 스프린트의 범위만 모드에 따라 적응한다. 상세는 `references/sprint-playbook.md`.
-
----
-
-## Activation Flow (오케스트레이터)
-
-8-step 흐름. STEP 1 = 출력 모드 선택(필수 게이트). Full tier 4-스프린트 루프(STEP 4)에 스프린트별 계약 협상 + 평가.
-
-### STEP 1 — 모드 선택 + HTML 산출 형태 (mandatory gate)
-활성화 즉시 사용자에게 **두 가지**를 함께 묻고 받는다:
-
-**(1-a) 출력 모드** — (1) Lean MVP 기획서 [기본/권장], (2) 정식 PRD, (3) 비즈니스+기획 통합, (4) 화면·기능 명세 중심, (5) 풀 기획 패키지(5단계 ~16종 산출물). 미응답/모호하면 (1) Lean MVP를 **제안**하되 확정 전엔 생성 안 함.
-
-**(1-b) HTML 산출 형태** (md는 항상 보존; `references/html-doc-template.md`):
-- **문서별 HTML + 허브 index.html** [기본/권장] — 각 `.md`를 읽기·공유·리뷰용 html로도 렌더 + 허브 `index.html`(중요도·순서·역할별 링크, `INDEX.md` 반영).
-- **둘 다** — 위 + 도식 종합 대시보드 `overview.html`(`references/html-visual-template.md`).
-- **비주얼 대시보드만** — `index.html` = 도식 대시보드만.
-- **없음(md만)** — HTML 생략.
-
-선택한 모드와 HTML 형태를 `spec.md` / `sprint-playbook.md`에 동결한다. **출력 위치 컨벤션: 모든 산출물은 프로젝트의 `docs/` 이하에 쓴다** — Mode 5 → `docs/`(번호 매긴 16종 `.md` + 선택 HTML + `INDEX.md`), Mode 1~4 → `docs/`(`service-plan.md` + 선택 HTML). 하네스 중간 파일(`spec.md`·`sprint_contract.md`·`research-s*.md`·`critique.md`·`handoff.md`)도 같은 작업 트리(`docs/` 또는 그 하위 작업 폴더)에 둔다. **Mode 5는 다중 산출물**이라 STEP 4 S4가 deliverable-그룹별로 확장되고 STEP 7 와이어프레임 게이트가 거의 항상 발동한다(화면설계서 포함).
-
-### STEP 2 — 입력 수집
-1–4문장 서비스 아이디어/요구사항을 받는다. 너무 모호하면 핵심 1~2개만 되묻고 진행한다(과도한 질문 금지). 그래도 모호하면 Planner가 가장 날카로운 가설 1개를 세워 spec/playbook에 가정으로 표기한다.
-
-### STEP 3 — Planner 디스패치
-`Agent` 콜로 `references/planner-prompt.md`를 Planner로 1회 실행. 동결된 모드의 섹션 구조로 `spec.md`를 작성하고, **4-스프린트 계획 + 각 스프린트의 모드 적응 범위를 `sprint-playbook.md`에 작성**한다. 반환: `SPEC_READY: spec.md` + `PLAYBOOK_READY: sprint-playbook.md`.
-
-### STEP 4 — 4-스프린트 루프 (S1→S2→S3→S4, 각 스프린트 cap 5–15)
-각 스프린트마다 순서대로:
-
-- **4a — 계약 협상**: Generator(`Agent` 콜, `references/generator-prompt.md`)가 해당 스프린트의 `sprint_contract.md`(범위 + 관측가능 체크 + 출력 파일/포맷)를 제안한다. Evaluator(`Agent` 콜, `references/evaluator-prompt.md`, Mode A1)를 디스패치해 계약을 **승인/수정**한다. 체크가 약하면 Evaluator가 강화한다. **승인 전엔 빌드 금지(safety gate).**
-- **4b — 스프린트 빌드**: Generator를 `Agent` 콜로 디스패치. 해당 스프린트 산출물(`research-s1.md`/`-s2.md`/`-s3.md`, 또는 S4의 `service-plan.md`)과 `generator_report.md`를 산출하고 핸드오프 전 self-verify. 반환: `READY_FOR_QA` 또는 `HANDOFF_NEEDED`(→ 4d) 또는 `DEADLOCK`(→ STEP 8).
-- **4c — 스프린트 평가**: Evaluator를 `Agent` 콜(Mode A2)로 디스패치해 그 스프린트의 관측가능 체크 + 스프린트 관련 probe/게이트로 `critique.md`를 산출. `PASS`면 다음 스프린트로; `FAIL`이고 라운드 < cap이면 같은 스프린트 재시도(Generator의 Strategic Decision: REFINE/PIVOT 적용); `FAIL`이고 라운드 = cap이면 미해결 이슈를 투명 기록하고 사용자 판단을 받아 다음 스프린트 진행 여부를 결정.
-- **4d — 컨텍스트 핸드오프**: `HANDOFF_NEEDED`면 fresh Generator 세션을 `handoff.md`만 읽혀 해당 스프린트를 재개한다. **컴팩션 금지** — 컴팩션은 불안 상태를 보존하므로 회복 경로로 금지(reset ≠ compaction).
-
-### STEP 5 — 최종 통합 Evaluator 패스
-S4 완료 후, `Agent` 콜로 Evaluator(Mode B)를 디스패치해 통합 `service-plan.md`에 대해 **4축 루브릭 점수 + 7개 적대적 probe + §8 6게이트 전부**를 실행해 `critique.md` 산출. 반환: `CRITIQUE_READY: critique.md`.
-
-### STEP 6 — 판정 분기
-- `PASS` (All ≥4, 2×(C2/C3) ≥4, probes clean, §8 전부 통과) → STEP 7.
-- `FAIL` → 결손이 특정 스프린트 산출물에 귀속되면 해당 스프린트로 복귀(STEP 4, cap 내), 통합 단계 결손이면 S4 재시도. 전체 cap 도달 시 현재 최선본 + 미해결 blocking issue를 투명 보고.
-
-### STEP 7 — 조건부 와이어프레임 인간 체크포인트 (P-1, S3 직후가 가장 관련 큼)
-`research-s3.md` / `service-plan.md`에 **와이어프레임/화면 목업 블록**이 포함됐는지 검사한다.
-- **포함 안 됨 (모드 1/3 일반)** → 체크포인트 **스킵**, 완전 자동, STEP 8로 진행.
-- **포함됨 (모드 2/4 가능)** → **사용자에게 와이어프레임 검토·승인을 요청**하고, 승인 전엔 최종 PASS를 확정하지 않는다. 텍스트 부분은 정상 PASS, 시각 부분은 `HUMAN_CHECKPOINT_REQUIRED`로 표시해 사용자에게 노출한다.
-
-> 이 게이트의 근거: 텍스트 산출물은 LLM이 모든 단어를 읽고 판단 가능하나(sensory limits = none), UI 와이어프레임/목업의 시각적 craft는 LLM 미적 판단의 신뢰 범위를 넘는다. 따라서 그 경우에만 인간 체크포인트를 삽입한다. "Evaluator가 알아서 처리"는 허용되지 않는다 — 시각 승인은 사람이 한다.
-
-### STEP 7.5 — HTML 렌더 (STEP 1-b 선택에 따라 분기; md는 항상 보존)
-PASS된 최종 산출물을 STEP 1-b에서 고른 형태로 HTML 렌더한다. **모든 HTML은 신규 내용 생성 금지 — 기존 `.md` 산출물을 충실히 변환/시각화만**(돈 규칙은 단일출처 인용). 와이어프레임/시각 craft 포함 시 STEP 7 인간 체크포인트 통과 후 렌더.
-- **문서별 HTML + 허브** [기본]: `references/html-doc-template.md`에 따라 각 `.md` → 읽기용 `NN-name.html`(+Mode 1~4는 `<service>-plan.html`) + 허브 `index.html`(`INDEX.md`의 중요도·순서·역할별을 네비로). 가독·공유·리뷰 목적.
-- **둘 다**: 위 + 도식 종합 대시보드 `overview.html`(`references/html-visual-template.md`).
-- **비주얼 대시보드만**: `index.html` = 도식 대시보드(`references/html-visual-template.md`). 시각화 카탈로그(마인드맵·가치순환·자금흐름·경쟁매트릭스·페르소나 웹툰·유저플로우·IA트리·아키텍처·ERD·지표차트·범위·간트)를 실제 데이터로.
-- **없음**: 스킵(md만).
-
-### STEP 7.6 — 중요도 그룹핑·순서 길잡이 (Mode 5, 모든 문서 작성 후)
-Mode 5에서 모든 산출물(16종 + `index.html`) 완성 후 **마지막으로 `INDEX.md`를 생성**한다(`references/mode-templates.md` "INDEX.md 생성 규칙", sprint-playbook S4-g7). 포함: ① 중요도 3티어(T1 필수 / T2 조건부 / T3 보조, 도메인 맞춤 판정) ② 작업 순서(의존성 기반) ③ 역할별 묶음(개발/QA/디자이너/기획/경영) ④ 최소 착수 세트(Lean 6종). 문서를 위한 문서가 되지 않게 — 실제 필요도로 분류·정렬만 하고 신규 내용 생성 금지.
-
-### STEP 8 — 산출/종료
-최종 산출물을 전달한다(Mode 5는 `docs/` 16종 `.md` + `INDEX.md` + STEP 1-b 선택 HTML[문서별 `NN-name.html` + 허브 `index.html`, 또는 도식 `overview.html`/`index.html`]). 원본 `.md`는 항상 보존된다. `DEADLOCK` 발생 시 양측 입장을 요약해 사용자 판단을 요청한다.
-
-### 사용자 확인 게이트 요약
-(a) STEP 1 모드 확정 전 생성 금지; (b) STEP 4a 계약 미승인 시 빌드 금지; (c) STEP 7 와이어프레임 포함 시 사용자 승인 전 PASS 확정 금지; (d) cap 도달 시 미해결 이슈 투명 보고.
-
-### Safety gates (도메인)
-모드 확정 게이트(STEP 1), 스프린트별 계약 승인 게이트(STEP 4a), 조건부 와이어프레임 인간 체크포인트(STEP 7), §8 이진 검증 게이트(STEP 4c/STEP 5).
+The 4 sprints **always** run; only each sprint's scope adapts to the mode. Details in `references/sprint-playbook.md`.
 
 ---
 
-## 반복 캡 & 반복 지혜 (Iteration Wisdom)
+## Activation Flow (orchestrator)
 
-- **iteration cap = 5–15 per sprint, 기본 시작 ~8** — 이것은 **범위이지 단일값이 아니다.** 캡은 각 스프린트(S1–S4)에 개별 적용되고, 전체 런은 4개 스프린트의 합이다.
-- **저점(5) 경고**: 스프린트를 너무 일찍(예: 3회) 끊으면 **후반 라운드의 돌파**를 놓칠 수 있다. 한 사례에서 가장 좋은 결과가 반복 10회차에서 나왔다 — "Dutch Art Museum leap at iteration 10". 캡 저점을 고르면 이런 late-iteration breakthrough를 잘라낼 위험이 있다.
-- **벽시계 관용**: 인위적으로 서두르지 않는다. 좋은 기획서는 시간이 걸린다 — 진행이 느리다는 이유만으로 라운드를 줄이지 않는다.
-- **중간 반복이 최종보다 나을 수 있다**: Evaluator는 `critique.md`에 **Iteration Quality Note**를 남겨, 이전 라운드가 더 나았던 강점이 있으면 명시한다. 그 강점을 잃지 않도록 다음 라운드에서 보존한다.
+An 8-step flow. STEP 1 = output-mode selection (mandatory gate). The Full-tier 4-sprint loop (STEP 4) has per-sprint contract negotiation + evaluation.
+
+### STEP 1 — mode selection + HTML form + output language (mandatory gate)
+On activation, ask the user for and receive **three** things together:
+
+**(1-a) Output mode** — (1) Lean MVP plan [default/recommended], (2) Full PRD, (3) Business+planning combined, (4) Screen·feature-spec focused, (5) Full planning package (5-stage ~16 deliverables). If unanswered/ambiguous, **propose** (1) Lean MVP but do not generate before confirmation.
+
+**(1-b) HTML output form** (md always preserved; infographic-first, so a diagram dashboard is included by default; `references/html-doc-template.md`):
+- **Both (per-document HTML + diagram-rich dashboard)** [default/recommended] — render each `.md` as readable/shareable/reviewable html (body ASCII diagrams preserved + data-driven inline SVG infographics·generated images shown) + hub `index.html` (links by importance·order·role, reflecting `INDEX.md`) + diagram-rich dashboard `overview.html` (`references/html-visual-template.md`).
+- **Visual dashboard only** — `index.html` = diagram-rich dashboard only (`references/html-visual-template.md`).
+- **Per-document HTML only** — each `.md` → readable html (ASCII diagrams·inline SVG·generated images) + hub, dashboard omitted.
+- **None (md only)** — skip HTML. (But the md body's infographics/diagrams [ASCII·matrices·generated images where available] are always embedded — G-g.)
+
+**(1-c) Deliverable output language** — the language the generated deliverable is written in: **Korean [default]** or **English**. (The skill's own instructions are English; this controls only the produced document's prose/section headings.) If unanswered, default to Korean.
+
+Freeze the chosen mode, HTML form, and output language into `spec.md` / `sprint-playbook.md`. **Output-location convention: all deliverables are written under the project's `docs/`** — Mode 5 → `docs/` (numbered 16 `.md` + optional HTML + `INDEX.md`), Modes 1–4 → `docs/` (`service-plan.md` + optional HTML). Harness intermediate files (`spec.md`·`sprint_contract.md`·`research-s*.md`·`critique.md`·`handoff.md`) live in the same working tree (`docs/` or a sub-working folder). **Mode 5 is multi-deliverable**, so STEP 4 S4 expands per deliverable-group and the STEP 7 wireframe gate almost always fires (screen spec included).
+
+### STEP 2 — intake
+Receive the 1–4 sentence service idea/requirements. If too vague, ask back about only 1–2 essentials and proceed (no over-questioning). If still vague, the Planner forms the single sharpest hypothesis and records it as an assumption in spec/playbook.
+
+### STEP 3 — dispatch Planner
+Run the Planner once via an `Agent` call on `references/planner-prompt.md`. It writes `spec.md` with the frozen mode's section structure and **writes the 4-sprint plan + each sprint's mode-adapted scope into `sprint-playbook.md`**. Returns: `SPEC_READY: spec.md` + `PLAYBOOK_READY: sprint-playbook.md`.
+
+### STEP 4 — 4-sprint loop (S1→S2→S3→S4, each sprint cap 5–15)
+For each sprint in order:
+
+- **4a — contract negotiation**: The Generator (`Agent` call, `references/generator-prompt.md`) proposes that sprint's `sprint_contract.md` (scope + observable checks + output file/format). Dispatch the Evaluator (`Agent` call, `references/evaluator-prompt.md`, Mode A1) to **approve/amend** the contract. If the checks are weak, the Evaluator strengthens them. **No build before approval (safety gate).**
+- **4b — sprint build**: Dispatch the Generator via an `Agent` call. It produces that sprint's deliverable (`research-s1.md`/`-s2.md`/`-s3.md`, or S4's `service-plan.md`) and `generator_report.md`, self-verifying before handoff. Returns: `READY_FOR_QA`, or `HANDOFF_NEEDED` (→ 4d), or `DEADLOCK` (→ STEP 8).
+- **4c — sprint evaluation**: Dispatch the Evaluator (`Agent` call, Mode A2) to produce `critique.md` against that sprint's observable checks + sprint-relevant probes/gates. On `PASS`, advance to the next sprint; on `FAIL` and round < cap, retry the same sprint (applying the Generator's Strategic Decision: REFINE/PIVOT); on `FAIL` and round = cap, transparently record the unresolved issues and get the user's judgment on whether to advance.
+- **4d — context handoff**: On `HANDOFF_NEEDED`, resume the sprint with a fresh Generator session reading only `handoff.md`. **No compaction** — compaction preserves the anxiety state, so it is forbidden as a recovery path (reset ≠ compaction).
+
+### STEP 5 — final integrated Evaluator pass
+After S4, dispatch the Evaluator (Mode B) via an `Agent` call to run **the 4-axis rubric + 8 adversarial probes + all §8 7 gates** on the integrated `service-plan.md`, producing `critique.md`. Returns: `CRITIQUE_READY: critique.md`.
+
+### STEP 6 — verdict branching
+- `PASS` (all ≥4, 2×(C2/C3) ≥4, probes clean, all §8 pass) → STEP 7.
+- `FAIL` → if the gap is attributable to a specific sprint deliverable, return to that sprint (STEP 4, within cap); if it's an integration-stage gap, retry S4. If the overall cap is reached, transparently report the current best version + unresolved blocking issues.
+
+### STEP 7 — conditional wireframe human-checkpoint (P-1, most relevant right after S3)
+Check whether `research-s3.md` / `service-plan.md` contains a **wireframe / screen-mockup block**.
+- **Not present (Modes 1/3 generally)** → **skip** the checkpoint, fully automatic, proceed to STEP 8.
+- **Present (Modes 2/4 possible)** → **ask the user to review·approve the wireframes**, and do not confirm the final PASS before approval. The text part PASSes normally; the visual part is marked `HUMAN_CHECKPOINT_REQUIRED` and surfaced to the user.
+
+> Rationale for this gate: an LLM can read every word of a text deliverable and judge it (sensory limits = none), but the visual craft of a UI wireframe/mockup exceeds the LLM's reliable aesthetic judgment. So a human checkpoint is inserted only in that case. "The Evaluator will handle it" is not allowed — visual approval is a human's.
+
+### STEP 7.5 — HTML render (branches on the STEP 1-b choice; md always preserved)
+Render the PASSed final deliverable into HTML in the form chosen at STEP 1-b. **All HTML generates no new content — only faithfully convert/visualize the existing `.md` deliverables** (money rules cite the single source). Readable HTML preserves the md's ASCII diagrams (monospace), promotes md data into **inline SVG/CSS infographics**, and displays generated image assets (`docs/assets/`). **No external-renderer dependency (Mermaid discouraged) — every visualization is self-contained.** If wireframes / visual craft are included, render after the STEP 7 human checkpoint clears.
+- **Both** [default]: per `references/html-doc-template.md`, each `.md` → readable `NN-name.html` (ASCII preserved + inline SVG infographics + generated images; +Modes 1–4 get `<service>-plan.html`) + hub `index.html` (nav from `INDEX.md`'s importance·order·role) **+ diagram-rich dashboard `overview.html`** (`references/html-visual-template.md`). Both readability·sharing·review + structure-at-a-glance.
+- **Visual dashboard only**: `index.html` = diagram dashboard (`references/html-visual-template.md`). Fill the visualization catalog (mind map·value loop·ecosystem map·money flow·competition matrix·persona webtoon·user flow·sequence·IA tree·architecture·ERD·metric charts·scope·Gantt, plus topic-specific invented visualizations) with real data, all inline SVG/CSS + generated images where available.
+- **Per-document HTML only**: the "Both" above minus `overview.html` (each `.md` readable html [ASCII preserved + inline SVG + generated images] + hub).
+- **None**: skip HTML (md only — but the md body's infographics/diagrams are always embedded).
+
+### STEP 7.6 — importance-grouping·order guide (Mode 5, after all documents written)
+In Mode 5, after all deliverables (16 + `index.html`) are complete, **generate `INDEX.md` last** (`references/mode-templates.md` "INDEX.md generation rules", sprint-playbook S4-g7). Include: ① 3-tier importance (T1 essential / T2 conditional / T3 supplementary, judged per domain) ② work order (dependency-based) ③ per-role bundles (Dev/QA/Designer/Planner/Management) ④ minimal start set (Lean 6). Don't make documentation theater — only classify·sort by actual need, no new content.
+
+### STEP 8 — deliver/finish
+Deliver the final output (Mode 5 = `docs/` 16 `.md` + `INDEX.md` + STEP 1-b HTML [per-document `NN-name.html` + hub `index.html`, or diagram `overview.html`/`index.html`]). The original `.md` is always preserved. On `DEADLOCK`, summarize both sides' positions and request the user's judgment.
+
+### User-confirmation gate summary
+(a) no generation before the STEP 1 mode is confirmed; (b) no build before the STEP 4a contract is approved; (c) no final PASS before user approval when STEP 7 wireframes are present; (d) transparent reporting of unresolved issues when the cap is reached.
+
+### Safety gates (domain)
+mode-confirmation gate (STEP 1), per-sprint contract-approval gate (STEP 4a), conditional wireframe human-checkpoint (STEP 7), §8 binary verification gates (STEP 4c/STEP 5).
 
 ---
 
-## 원칙 (Principles)
+## Iteration cap & iteration wisdom
 
-- **reset ≠ compaction**: 컨텍스트 압박 시 회복 경로는 `handoff.md` + fresh 세션이지 컴팩션이 아니다. 컴팩션은 불안 상태를 보존하므로 회복 경로로 **금지**한다. Opus 4.8에서는 컨텍스트 불안이 드물지만, 발생 시 이 규칙을 따른다.
-- **모든 컴포넌트는 가정을 인코딩한다**: 이 하니스의 각 컴포넌트는 "모델이 혼자 못 하는 무언가"에 대한 가정을 담는다. 여기서 스프린트 구조의 가정은 "합성 전에 리서치 품질을 게이트해야 한다"이다. 모델 업그레이드 시 가정을 **하나씩** 검증하고 — 한 컴포넌트를 한 번에 하나씩 제거해 측정한다(radical 한꺼번에 제거는 실패했고, methodical one-at-a-time이 성공했다).
-- **GAN 분리**: Generator와 Evaluator를 별도 `Agent`로 분리하는 이유는 self-evaluation bias(LLM이 평범한 결과를 자신 있게 칭찬하는 경향)를 구조적으로 상쇄하기 위함이다.
-- **단순성 우선** (Anthropic, "Building Effective Agents"): "find the simplest solution possible, and only increase complexity when needed." 이 스킬이 Full을 택한 것은 단순성 원칙 위반이 아니라 — 리서치 게이팅이라는 직교적 필요 때문이며, 그 필요가 사라지면 단순화한다.
+- **iteration cap = 5–15 per sprint, default start ~8** — this is a **range, not a single value.** The cap applies per sprint (S1–S4), and the whole run is the sum of the 4 sprints.
+- **Low-end (5) warning**: cutting a sprint too early (e.g. 3 rounds) can miss a **late-round breakthrough**. In one case the best result came at iteration 10 — "Dutch Art Museum leap at iteration 10". Choosing a low cap risks cutting off such late-iteration breakthroughs.
+- **Wall-clock tolerance**: don't rush artificially. A good plan takes time — don't cut rounds just because progress feels slow.
+- **An intermediate iteration may beat the final**: the Evaluator leaves an **Iteration Quality Note** in `critique.md`, calling out strengths a prior round had. Preserve those in the next round so they aren't lost.
 
 ---
 
-## V1 vs V2 guidance (모델별)
+## Principles
 
-이 스킬은 **Full tier(V1 계열)**다. 모델 클래스별 권장 tier:
+- **reset ≠ compaction**: under context pressure the recovery path is `handoff.md` + a fresh session, not compaction. Compaction preserves the anxiety state, so it is **forbidden** as a recovery path. Context anxiety is rare on Opus 4.8, but follow this rule when it occurs.
+- **Every component encodes an assumption**: each component of this harness encodes an assumption about "something the model can't do alone." Here the sprint structure's assumption is "research quality must be gated before synthesis." On model upgrade, validate assumptions **one at a time** — remove one component at a time and measure (radical all-at-once removal failed; methodical one-at-a-time succeeded).
+- **GAN separation**: Generator and Evaluator are split into separate `Agent`s precisely to structurally counter self-evaluation bias (an LLM's tendency to confidently praise mediocre work).
+- **Simplicity first** (Anthropic, "Building Effective Agents"): "find the simplest solution possible, and only increase complexity when needed." This skill choosing Full is not a violation of simplicity — it's for the orthogonal need of research gating, and it simplifies once that need disappears.
+- **Infographic-first**: content with structure (hierarchy·flow·relationship·timeline·comparison·state transition) is conveyed first through **the visual that best holds the concept**, not a prose/table wall — mind map·flowchart·sequence·state diagram·ERD·Gantt·comparison matrix·chart·journey map·ecosystem map·infographic·explainer webtoon, and when no standard diagram fits, **invent a topic-specific visualization** (gate G-g). Diagrams are the primary medium, not decoration. **3-tier visualization production (in priority order, use the highest available)**:
+  1. **Image generation (when possible)** — if image-generation capability exists, produce real illustrations/images: persona webtoon panels·ecosystem illustrations·concept heroes·situation scenes and other assets where a picture works better. Save to `docs/assets/` and reference from md (`![](assets/…)`)·HTML. Fall back to tier 2 if unavailable.
+  2. **Inline SVG/CSS infographics** — the primary visual medium for HTML output (readable + dashboard). Hand-author data-driven charts·matrices·flows·ecosystem maps·money flows·Gantt·ERD in SVG/CSS. **Zero external dependencies** (external-renderer diagrams such as Mermaid are **discouraged** — self-contained·offline·design control first).
+  3. **ASCII diagrams + matrix tables** — portable visualization in the md body (no renderer needed). Trees·flows·sequences·comparison matrices. The md always carries this tier or above.
+  - **Standing UI/screen/design visual rule**: **everywhere** UI/GUI/UX·screen design·design is mentioned (IA·user flows·wireframes·screen spec·screen definitions·components·states) must not end with prose explanation only and **must** be accompanied by a visual (wireframe·screen layout·state-transition diagram·flow diagram·component diagram·mockup image when possible). "Screen X shows …" as prose alone fails (G-g).
+- **Ecosystem lens**: service analysis does not stop at a single user / single competitor but describes **the whole ecosystem (value network) the service sits in and all its participants** — supply/demand side, platforms·intermediaries, complement·substitute providers, regulators·institutions, payment·infrastructure partners, data/content providers, etc. Identify each participant's role·incentive·value exchange·dependency and visualize it as an **ecosystem map (stakeholder / value-network diagram)** (S1·02-market-competition). This is the foundation for the differentiation (C2)·moat·platform two-sidedness argument.
+
+---
+
+## V1 vs V2 guidance (per model)
+
+This skill is **Full tier (the V1 line)**. Recommended tier by model class:
 
 | Model class | Context anxiety | Recommended tier | Notes |
 |-------------|----------------|-----------------|-------|
@@ -147,49 +157,50 @@ Mode 5에서 모든 산출물(16종 + `index.html`) 완성 후 **마지막으로
 
 General rule: every harness component encodes an assumption about what the model can't do alone. On model upgrade, stress-test each assumption individually — remove one component at a time and measure. Cite Anthropic, "Building Effective Agents" — "find the simplest solution possible, and only increase complexity when needed".
 
-### Opus 4.8: Full vs Simplified 정당화 (G-1/G-2)
-Opus 4.8(1M 컨텍스트)은 컨텍스트 불안이 사실상 제거됐다 — 컨텍스트 관점에서는 스프린트 구조가 redundant하므로 article은 **Simplified**를 기본으로 권한다. 그러나 여기서는 **Full을 의도적으로 선택**했다. 이유: 이 스프린트 구조는 컨텍스트 완화 장치가 아니라 **직교적(orthogonal) 메커니즘** — 리서치-페이즈 분해 + 페이즈별 품질 게이팅(S1–S3 리서치를 Evaluator가 게이트로 통과시킨 뒤에만 S4가 그 위에 기획서를 합성)이기 때문이다. 강한 모델도 이 게이팅의 이득을 잃지 않는다(가정: "합성 전에 리서치 품질을 게이트해야 한다" — 모델 강함이 이를 무효화하지 않음).
+### Opus 4.8: Full vs Simplified justification (G-1/G-2)
+Opus 4.8 (1M context) has effectively eliminated context anxiety — from a context standpoint the sprint structure is redundant, so the article recommends **Simplified** by default. But here **Full was chosen deliberately.** Reason: this sprint structure is not a context-relief device but an **orthogonal mechanism** — research-phase decomposition + per-phase quality gating (S4 synthesizes the plan on top of S1–S3 research only after the Evaluator passes it through gates). A strong model does not lose this gating's benefit (assumption: "research quality must be gated before synthesis" — model strength does not invalidate it).
 
-**업그레이드 스트레스 테스트 (G-1/G-2, 하나씩)**: "모델이 명시 sprint contract 없이 4개 리서치 페이즈를 스스로 조직하고 품질을 self-gate할 수 있는가?" YES면 스프린트 구조를 **한 스프린트/계약씩** 제거하며 재측정한다 — 전부 한꺼번에 제거하지 않는다(radical 제거는 실패, methodical one-at-a-time 성공). 하니스 공간은 줄어드는 게 아니라 이동한다 — 무엇이 load-bearing인지 매 업그레이드마다 재검토한다.
+**Upgrade stress-test (G-1/G-2, one at a time)**: "Can the model self-organize the 4 research phases and self-gate quality without explicit sprint contracts?" If YES, remove the sprint structure **one sprint/contract at a time** and re-measure — don't remove it all at once (radical removal failed; methodical one-at-a-time succeeded). The harness space doesn't shrink, it shifts — re-examine what's load-bearing on every upgrade.
 
 ---
 
 ## Evaluator tuning workflow
 
-untuned Evaluator는 너무 관대하다. 첫 런들은 draft로 취급하고, 다음 **운영 루프**로 보정한다(G-4/P-3). 한 문장 인정으로 끝내지 말고 (a)–(d)를 실제로 돌린다:
+An untuned Evaluator is too lenient. Treat the first runs as drafts and calibrate via this **operating loop** (G-4/P-3). Don't settle for a one-sentence acknowledgment — actually run (a)–(d):
 
-- **(a) Read critique logs** — 완료된 런들의 `critique.md`를 실제 산출물과 나란히 읽는다. 각 루브릭 점수에 대해 묻는다: "까다로운 시니어 PM / 기획 리드라면 같은 점수를 줬을까?"
-- **(b) Identify divergence patterns** — 발산 패턴을 특정한다. 전형: 관대 채점(generic/shallow 산출을 적정으로 수용), 미매핑 기능 누락, 측정 불가 지표를 통과시킴, 추상 페르소나를 C1 합격, 표면 외형만 보고 substance 미확인.
-- **(c) Update prompt or calibration with counter-examples** — `references/evaluator-prompt.md` 또는 `references/evaluator-calibration.md`에 그 실패 모드를 겨냥한 **구체 반례**를 추가한다(예: "측정 가능해 보이나 판별 기준이 빠진 지표는 5/5가 아니라 3/5"). few-shot 보정이 score drift를 줄인다.
-- **(d) Rerun on the same input; confirm the catch** — 같은 입력으로 재실행해 Evaluator가 이전 누락을 이제 잡아내는지 확인한다. 잡으면 그 보정을 고정한다.
+- **(a) Read critique logs** — read completed runs' `critique.md` side by side with the actual deliverables. For each rubric score, ask: "Would a demanding senior PM / planning lead give the same score?"
+- **(b) Identify divergence patterns** — pinpoint the divergence patterns. Typical: lenient scoring (accepting generic/shallow output as adequate), missing unmapped features, passing non-measurable metrics, passing abstract personas on C1, judging by surface appearance without confirming substance.
+- **(c) Update prompt or calibration with counter-examples** — add **concrete counter-examples** targeting that failure mode to `references/evaluator-prompt.md` or `references/evaluator-calibration.md` (e.g. "a metric that looks measurable but lacks a discrimination criterion is 3/5, not 5/5"). Few-shot calibration reduces score drift.
+- **(d) Rerun on the same input; confirm the catch** — rerun on the same input and confirm the Evaluator now catches the prior miss. If it does, lock that calibration.
 
-(a)–(d) 중 하나라도 건너뛰면 튜닝이 아니다. Evaluator 판정이 신중한 인간 전문가 패스와 상관하고, 제기하는 모든 blocking issue가 재현 가능해질 때까지 반복한다(여러 사이클 예상).
+Skipping any of (a)–(d) is not tuning. Iterate until the Evaluator's verdicts correlate with a careful human-expert pass and every blocking issue it raises is reproducible (expect several cycles).
 
 ---
 
-## §8 도메인 검증 게이트 (binary)
+## §8 domain verification gates (binary)
 
-최종 PASS 전 6개 이진 게이트 전부 통과해야 한다(Generator가 S4 핸드오프 전 self-check, Evaluator가 STEP 4c/STEP 5에서 검증). 상세는 `references/sprint-playbook.md` / `references/evaluator-prompt.md`.
+All 7 binary gates must pass before the final PASS (Generator self-checks before S4 handoff; Evaluator verifies at STEP 4c/STEP 5). Details in `references/sprint-playbook.md` / `references/evaluator-prompt.md`.
 
 | Gate | Check | PASS / FAIL |
 |------|-------|-------------|
-| G-a 기능↔문제 추적 | 모든 핵심기능이 특정 문제에 매핑 | 모든 기능 ≥1 문제 연결 / 미매핑 기능 1개라도 |
-| G-b 타겟 구체성 | 페르소나 ≥1명 상황·페인포인트 포함 | 상황·맥락·페인포인트 명시 / 추상 인구통계만 |
-| G-c 차별화 명시 비교 | ≥1개 실제 경쟁과 명시 비교 | 경쟁자명+비교축 존재 / 미특정 or "더 좋다"식 |
-| G-d 성공지표 측정성 | 모든 지표 측정 수치+방법 | 각 지표 수치·도구·기간 / 비측정 지표 1개라도 |
-| G-e MVP 범위/비범위 분리 | MVP / out-of-scope 명시 구분 | 분리 존재 / 구분 없음 or 모호 |
-| G-f 자리표시자 없음 | placeholder/TBD/빈 칸 0 | 스캔 결과 0개 / 1개라도 |
+| G-a feature↔problem trace | every core feature maps to a specific problem | every feature linked to ≥1 problem / any unmapped feature |
+| G-b target specificity | ≥1 persona includes situation·pain points | situation·context·pain points stated / abstract demographics only |
+| G-c explicit differentiation comparison | explicit comparison vs ≥1 real competitor | competitor name + comparison axis present / unspecified or "it's better"-style |
+| G-d success-metric measurability | every metric has a measurement number + method | each metric has number·tool·period / any non-measurable metric |
+| G-e MVP scope / out-of-scope separation | MVP / out-of-scope explicitly separated | separation present / no separation or ambiguous |
+| G-f no placeholders | placeholder/TBD/empty cells = 0 | scan finds 0 / any |
+| G-g infographic fit | a document with structure (hierarchy·flow·relationship·timeline·comparison·state transition) expresses that structure as a diagram/infographic. **+ everywhere UI/GUI/UX·screen design·design is mentioned has a standing visual (required)** | each structured document embeds ≥1 concept-appropriate visualization (image/inline SVG/ASCII/matrix) **AND every UI/screen/design section has a visual (wireframe·screen layout·state-transition diagram·flow·component diagram·mockup)**, empty diagrams·placeholders = 0 / structure left as a text wall, or UI/screen/design described as prose only, or any empty diagram, or dependence on an external renderer such as Mermaid |
 
 ---
 
-## 파일 핸드오프 (file-based communication, full set)
+## File handoffs (file-based communication, full set)
 
-역할은 파일로만 소통한다. 활성 파일:
-`spec.md`·`sprint-playbook.md` (Planner→) / `sprint_contract.md` (Generator⇄Evaluator, 스프린트별) / `research-s1.md`·`research-s2.md`·`research-s3.md` (스프린트 산출물, 후속 스프린트가 읽음) / `service-plan.md` (S4 최종 기획서) / `generator_report.md`·`critique.md` (스프린트별 + 최종) / `handoff.md` (Generator → fresh Generator, 컨텍스트 압박 시).
+Roles communicate only through files. Active files:
+`spec.md`·`sprint-playbook.md` (Planner→) / `sprint_contract.md` (Generator⇄Evaluator, per sprint) / `research-s1.md`·`research-s2.md`·`research-s3.md` (sprint deliverables, read by later sprints) / `service-plan.md` (S4 final plan) / `generator_report.md`·`critique.md` (per sprint + final) / `handoff.md` (Generator → fresh Generator, under context pressure).
 
-각 역할은 fresh `Agent` 콜로 디스패치돼 자신의 핸드오프 파일만 읽는다. Planner는 1회 실행, Generator와 Evaluator는 각 스프린트 내 + 4개 스프린트에 걸쳐 교대한다.
+Each role is dispatched as a fresh `Agent` call reading only its handoff files. The Planner runs once; the Generator and Evaluator alternate within each sprint + across the 4 sprints.
 
 ---
 
-## 범위 밖 (out-of-scope)
-코드 디버깅("이 React 컴포넌트 버그 고쳐줘")·콘텐츠 작성("블로그 글 써줘")은 서비스 기획서 산출이 아니므로 이 스킬을 활성화하지 않는다. description의 트리거(서비스 기획/PRD/MVP 기획/화면 명세 등)와 매칭되는 경우에만 활성화한다.
+## Out-of-scope
+Code debugging ("fix this React component bug") and content writing ("write a blog post") are not service-planning-document production, so this skill does not activate for them. Activate only when matching the description's triggers (service planning/PRD/MVP planning/screen spec, etc.).

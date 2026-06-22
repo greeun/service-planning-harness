@@ -12,9 +12,10 @@ Built on the Planner–Generator–Evaluator pattern from Anthropic's *Harness D
 
 LLMs left to "just write a plan" tend to produce confident, structurally complete, but shallow output: differentiation collapses into "more convenient / faster," scope balloons to "build everything," and success metrics read "improve satisfaction." This skill forces the opposite:
 
-- **Research is gated before synthesis.** Four research sprints (market → problem → UX → integration) each pass an adversarial Evaluator before the plan is built on top of them.
+- **Research is gated before synthesis.** Four research sprints (market·ecosystem → problem → UX → integration) each pass an adversarial Evaluator before the plan is built on top of them.
 - **Claude's weak axes get 2× weight.** Differentiation and actionability — the two things Claude underdelivers without pressure — dominate the rubric.
-- **Every claim is checkable.** Six binary gates (feature↔problem traceability, persona specificity, named-competitor comparison, metric measurability, MVP/out-of-scope split, zero placeholders) must all pass.
+- **Every claim is checkable.** Seven binary gates (feature↔problem traceability, persona specificity, named-competitor comparison, metric measurability, MVP/out-of-scope split, zero placeholders, infographic fitness) must all pass.
+- **Infographic-first + ecosystem lens.** Anything with structure is delivered as its best-fit visual (mind map, flowchart, sequence, ERD, Gantt, ecosystem map, comparison matrix, journey, webtoon — or a visualization invented for the topic), not a text wall: ASCII/matrices in `.md`, hand-authored **inline SVG/CSS infographics** in HTML, generated images where available (no Mermaid or external renderers). Service analysis describes the whole **ecosystem (value network) and its participants** via an ecosystem map, not a single competitor.
 
 ---
 
@@ -33,12 +34,12 @@ STEP 4  4 research sprints (each: contract → build → evaluate, cap 5–15)
       │   S3 UX/UI flows·screens → research-s3.md
       │   S4 integration → service-plan.md  (Mode 5: groups g1–g6 → package/)
       ▼
-STEP 5  Final integrated Evaluator pass  (4-axis rubric + 7 probes + 6 gates)
+STEP 5  Final integrated Evaluator pass  (4-axis rubric + 8 probes + 7 gates)
       │
       ▼
 STEP 7  Conditional wireframe human-checkpoint  (fires only if a wireframe is present)
       ▼
-STEP 7.5  HTML render per STEP 1-b choice  (per-doc HTML + hub index.html · or visual dashboard · .md always kept)
+STEP 7.5  HTML render per STEP 1-b choice (default = Both)  (per-doc HTML [ASCII + inline-SVG infographics + generated images] + hub + visual dashboard · .md always kept)
       ▼
 STEP 7.6  Importance-grouped index  (INDEX.md — tiers · work order · roles · lean set)
       ▼
@@ -57,7 +58,7 @@ Activation always asks which mode to produce first (STEP 1, mandatory gate):
 |------|------|----------|
 | 1 | **Lean MVP plan** *(default)* | Problem → target → core features → user flow → MVP scope → metrics. Buildable in ~4 weeks. Light S3, no wireframes. |
 | 2 | **Full PRD** | + functional spec / screen definitions / edge cases / non-functional requirements. |
-| 3 | **Business + product** | + market / competition / revenue-model analysis. Expanded S1. |
+| 3 | **Business + product** | + market / competition / ecosystem / revenue-model analysis. Expanded S1. |
 | 4 | **Screen & feature spec** | User flows / per-screen features / data structure. Heaviest S3 + wireframes. |
 | 5 | **Full planning package** | ~16 deliverables across 5 stages **+ a visual HTML dashboard** (`index.html`) **+ an importance-grouped index** (`INDEX.md`). |
 
@@ -70,7 +71,7 @@ package/
 ├─ Design      20-wireframes · 21-screen-spec
 ├─ Technical   30-functional-spec · 31-erd · 32-api-spec · 33-policy
 ├─ Execution   40-backlog · 41-qa-testcases
-├─ Final read  index.html   (mind map · flowcharts · architecture · ERD · charts · infographics · webtoon panels)
+├─ Final read  index.html   (mind map · ecosystem map · flowcharts · sequence · ERD · Gantt · charts · infographics · webtoon — all inline SVG/CSS + generated images where available)
 └─ Guide       INDEX.md     (importance tiers · work order · per-role bundles · minimal start set)
 ```
 
@@ -87,18 +88,18 @@ A **single-source rule** is enforced: money rules (pricing, take-rate, settlemen
 | C3 | **Feasibility (MVP scope)** | **2×** | Claude over-scopes without pressure; needs explicit MVP / out-of-scope split. |
 | C4 | Success-metric measurability | 1× | Section structure is adequate by default; backstopped by a measurability gate. |
 
-**Verdict:** all criteria ≥ 4, every adversarial probe clean, and all six §8 gates pass → **PASS**. Any 2×-weighted criterion < 4 → **FAIL**. Scoring is anchored to concrete 1/3/5 few-shot examples in `references/evaluator-calibration.md`.
+**Verdict:** all criteria ≥ 4, every adversarial probe clean, and all seven §8 gates pass → **PASS**. Any 2×-weighted criterion < 4 → **FAIL**. Scoring is anchored to concrete 1/3/5 few-shot examples in `references/evaluator-calibration.md`.
 
 ---
 
 ## HTML output (per-doc · dashboard)
 
-At STEP 1 you also choose the **HTML output form** (the `.md` files are always preserved):
+At STEP 1 you also choose the **HTML output form** (the `.md` files are always preserved; infographic-first means the visual dashboard is included by default):
 
-- **Per-doc HTML + hub `index.html`** *(default)* — each `.md` is also rendered as a clean, readable, shareable, reviewable HTML page (with TOC, section anchors, print CSS), plus a hub `index.html` that navigates them by importance tier / work order / role (from `INDEX.md`). See `references/html-doc-template.md`.
-- **Both** — the above plus a diagram-rich **visual dashboard** `overview.html`.
-- **Visual dashboard only** — a single self-contained `index.html` that makes the whole plan graspable at a glance: mind map, value-loop and money-flow infographics, competitive matrix, webtoon-style persona panels, user-flow charts, IA tree, system architecture, ERD, metric gauges, scope infographic, backlog Gantt (Mermaid + inline SVG/CSS, offline-capable). See `references/html-visual-template.md`.
-- **None** — `.md` only.
+- **Both (per-doc HTML + visual dashboard)** *(default)* — each `.md` is rendered as a clean, readable, shareable, reviewable HTML page (TOC, section anchors, print CSS, ASCII diagrams preserved + md data promoted to **inline SVG/CSS infographics** + generated images), plus a hub `index.html` (from `INDEX.md`) and a diagram-rich **visual dashboard** `overview.html`. See `references/html-doc-template.md` · `references/html-visual-template.md`.
+- **Visual dashboard only** — a single self-contained `index.html` that makes the whole plan graspable at a glance: mind map, ecosystem map, value-loop and money-flow infographics, competitive matrix, webtoon-style persona panels, user-flow & sequence charts, IA tree, system architecture, ERD, metric gauges, scope infographic, backlog Gantt — **all inline SVG/CSS + generated images where available, zero external dependencies** (no Mermaid, fully offline). See `references/html-visual-template.md`.
+- **Per-doc HTML only** — the "Both" above minus the diagram-rich dashboard.
+- **None** — `.md` only (its ASCII diagrams/matrices, and generated images where available, are always embedded).
 
 ---
 
@@ -134,7 +135,7 @@ service-planning-harness/
 └─ references/
    ├─ planner-prompt.md              # Planner: mode selection + spec/sprint-playbook
    ├─ generator-prompt.md            # Generator: per-sprint contract → build → self-verify
-   ├─ evaluator-prompt.md            # Evaluator: per-sprint + final pass, 7 adversarial probes
+   ├─ evaluator-prompt.md            # Evaluator: per-sprint + final pass, 8 adversarial probes
    ├─ evaluator-calibration.md       # few-shot 1/3/5 anchors for C1–C4
    ├─ rubric.md                      # 4 criteria, 2× weights, verdict logic
    ├─ sprint-playbook.md             # 4 research sprints + Mode 5 group expansion (g1–g6)
@@ -162,7 +163,7 @@ On a future model upgrade, the stress-test is: *can the model self-organize the 
 
 ## Example run
 
-Tested end-to-end on **character-market** (a two-sided AI-character + creator-upload marketplace), Mode 1 → Mode 5. All four research sprints and the final integrated pass returned **PASS** (C1 5 · C2 5 · C3 5 · C4 4; all six gates pass). The full package (16 deliverables + visual dashboard) lives under the project's `planning/package/`.
+Tested end-to-end on **character-market** (a two-sided AI-character + creator-upload marketplace), Mode 1 → Mode 5. All four research sprints and the final integrated pass returned **PASS** (C1 5 · C2 5 · C3 5 · C4 4; all gates of that version pass). The full package (16 deliverables + visual dashboard) lives under the project's `planning/package/`. *(Note: this instance predates the infographic-first / ecosystem / G-g additions — its visuals need updating to the new inline-SVG/CSS policy.)*
 
 ---
 

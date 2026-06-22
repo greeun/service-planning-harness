@@ -1,203 +1,239 @@
 # Mode Templates — service-planning-harness
 
-> 4개 산출물 모드의 문서 구조(섹션 스켈레톤). STEP 1에서 사용자가 고른 모드에 따라 Planner가 `spec.md`의 "Structure / flow" 섹션을 이 스켈레톤으로 채우고, Generator는 S4 통합 시 `service-plan.md`를 이 구조로 작성한다.
-> 모든 모드 공통 비기능 요구: 자리표시자/TBD 0개, 모든 핵심기능은 문제정의의 특정 문제에 매핑, 모든 성공지표는 측정가능 수치+측정방법 포함, MVP/out-of-scope 명시 분리. (§8 게이트 G-a~G-f)
+> Document structures (section skeletons) for 4 deliverable modes. Based on the mode the user picks in STEP 1, the Planner fills the "Structure / flow" section of `spec.md` with this skeleton, and during S4 integration the Generator writes `service-plan.md` in this structure.
+> Non-functional requirements shared by all modes: 0 placeholders/TBDs, every core feature maps to a specific problem from the problem definition, every success metric includes a measurable number + measurement method, MVP/out-of-scope explicitly separated, **every document with structure embeds concept-fit visualization (infographic-first, G-g)**. (§8 gates G-a–G-g)
+
+> Section labels here are English; the Generator renders headings in the user-selected output language (STEP 1-c; default Korean).
 
 ---
 
-## Mode 1 — Lean MVP 기획서 [기본/권장]
+## Infographic-first — per-document optimal visual-representation mapping (shared by all modes)
 
-가장 가볍고 빠르게 착수 가능한 최소 기획서. 개발팀이 바로 4주 안에 만들 수 있는 범위로.
+> Content that has structure (hierarchy / flow / relationships / time axis / comparison / state transition) is delivered not as a text wall but as **the visual representation that best captures that concept**. Three tiers of visualization production (use the highest available): ① **image generation (when possible)** real illustrations (webtoon / ecosystem / concept) → `docs/assets/`, referenced via md `![](assets/…)` / HTML / ② **inline SVG/CSS infographics** (the primary medium for HTML deliverables, 0 external dependencies) / ③ **ASCII diagrams / matrix tables** (md body, no renderer needed). **Diagrams that depend on external renderers such as Mermaid are not recommended** (self-contained, offline, design control). When a standard diagram does not fit the concept, **invent a topic-specific visualization**.
 
-```
-1. 문제정의 (who-what-why)
-   - 누구의 / 어떤 / 왜 문제인가
-2. 타겟 (핵심 페르소나 1)
-   - 상황·맥락·페인포인트 포함 1명 (Lean이라 1 핵심 페르소나)
-3. 핵심기능
-   - 각 기능 → 문제 매핑 (기능↔문제 추적표)
-4. 유저플로우
-   - 핵심 플로우만 (와이어프레임 없음)
-5. MVP 범위
-   - MVP 포함 / Out-of-scope(명시 제외) 분리
-   - 우선순위 + 근거
-6. 성공지표
-   - 각 지표: 수치 + 측정도구 + 기간 + 판별 기준
-7. 차별화 (간략)
-   - 최소 1개 실제 경쟁/대안과 명시 비교
-```
+| Document | Core structure | Optimal visual representation (md: ASCII/matrix · HTML: inline SVG · image when possible) |
+|------|-----------|----------------------------------------------------------------|
+| 00-business-model | Money/settlement flow / unit economics / triggers | Money-flow diagram (Sankey-style SVG/ASCII) · settlement trigger sequence · unit-economics bar/donut (SVG) / table |
+| 01-service-plan | Overall structure / value loop / MVP scope | Structure mind map · value-loop diagram · MVP↔Phase2 2-axis/quadrant |
+| 02-market-competition | **Ecosystem / participants** / positioning / competitive comparison / segmentation | **Ecosystem map (stakeholder / value-network diagram)** · positioning quadrant (2-axis scatter) · comparison matrix (✓/△/✗ color chips) · segmentation donut/pie |
+| 03-personas | Journey / value loop / empathy | Persona journey map (journey) · **explainer webtoon panels (image when possible)** · value loop |
+| 10-prd | Feature hierarchy/priority / scope | Feature mind map (P0/P1/P2 branches/colors) · scope quadrant |
+| 11-user-stories | Epic→Story hierarchy | Epic-Story tree (mind map/graph) |
+| 12-ia | Screen hierarchy tree | IA tree diagram (color by role, ASCII→SVG) |
+| 13-user-flows | Paths/branches / key sessions | User-flow flowchart · key-session sequence/state diagram |
+| 20-wireframes | Low-fidelity layout | ASCII layout blocks (visual craft = STEP 7 human / mockup image when possible) |
+| 21-screen-spec | Screen state transitions | State diagram (empty/loading/error/normal transitions) · per-screen state table |
+| 30-functional-spec | Input→processing→output / branches | Processing flowchart (validation / exception branches) |
+| 31-erd | Entities / relationships | ERD diagram (entity boxes + 1:N relationship lines, SVG/ASCII) |
+| 32-api-spec | Request/response flow | API sequence diagram (client→API→DB→external) · endpoint table |
+| 33-policy | Permission matrix / settlement-refund-consent flows | Permission-matrix heatmap · refund/dispute flowchart · consent sequence |
+| 40-backlog | Schedule / critical path | Gantt chart (sprint allocation / critical-path emphasis, SVG) |
+| 41-qa-testcases | Coverage / case map | Test-coverage map (mind map) · case table |
 
-S3 라이트(핵심 유저플로우만, 와이어프레임 없음) → STEP 7 체크포인트 일반적으로 스킵.
-
----
-
-## Mode 2 — 정식 PRD
-
-Mode 1 구조 + 기능명세 / 화면정의 / 엣지케이스 / 비기능요구. 정식 제품 요구사항 문서.
-
-```
-1. 문제정의 (who-what-why)
-2. 타겟 (페르소나, 필요 시 복수)
-3. 핵심기능 + 기능명세
-   - 각 기능 → 문제 매핑 (추적표)
-   - 기능별 상세 명세(입력/처리/출력/제약)
-4. 화면정의
-   - 화면별 목적·구성요소 (와이어프레임 포함 가능 → STEP 7 게이트 대상)
-5. 유저플로우
-   - 정상 플로우 + 엣지케이스
-6. 엣지케이스 / 예외처리
-7. 비기능요구
-   - 성능·보안·접근성·확장성 등 정성/정량 기준
-8. MVP 범위 (MVP 포함 / Out-of-scope 분리, 우선순위+근거)
-9. 차별화 (최소 1개 경쟁 명시 비교 + 비교축)
-10. 성공지표 (각 지표: 수치+측정도구+기간+판별 기준)
-```
-
-화면정의에 와이어프레임/목업 포함 가능 → 포함 시 STEP 7 인간 체크포인트 발동.
+> Modes 1–4 (single document) use only what fits the relevant sections (e.g. Mode 1 Lean → structure mind map · value loop · MVP quadrant · key-flow flowchart · metric charts · comparison matrix). Mode 5 uses all of the above. In any mode, **a section that has structure is never left as prose/tables only without a diagram (G-g)**.
+>
+> **Always-on visual rule for UI/screens/design (mandatory)**: Everywhere UI/GUI/UX, screen design, or design is mentioned (12-ia · 13-user-flows · 20-wireframes · 21-screen-spec, Mode 2 screen definition, Mode 4 per-screen spec, etc.), do not stop at text description — **always** accompany it with a visual (wireframe · screen layout · state-transition diagram · flow · component diagram · mockup image when possible). Describing a screen in prose alone = G-g FAIL.
 
 ---
 
-## Mode 3 — 비즈니스 + 기획 통합 문서
+## Mode 1 — Lean MVP plan [default/recommended]
 
-Mode 2 구조 + 시장 / 경쟁 / 수익모델 비즈니스 분석 섹션. S1이 확장된다(시장규모/세분시장/수익모델).
+The lightest, fastest-to-start minimal plan. Scoped so a dev team can build it within 4 weeks.
 
 ```
-1. Executive Summary (1페이지 요약)
-2. 시장 분석
-   - 시장규모(TAM/SAM/SOM 근거), 세분시장, 트렌드
-3. 경쟁 분석
-   - 복수 실제 경쟁자 + 비교축 매트릭스, 해자/차별 논거
-4. 수익모델
-   - 과금 구조, 단가/유닛 이코노믹스 가정, 수익 가설
-5. 문제정의 (who-what-why)
-6. 타겟 (페르소나)
-7. 핵심기능 + 기능명세 (기능↔문제 추적표)
-8. 유저플로우 / 화면정의
-9. MVP 범위 (MVP 포함 / Out-of-scope 분리, 우선순위+근거)
-10. 차별화 (경쟁 명시 비교 + 비교축 + 해자)
-11. 성공지표 (사업 KPI + 제품 KPI, 각 지표 수치+측정방법)
-12. 리스크 & 가정
+1. Problem definition (who-what-why)
+   - For whom / what / why is it a problem
+2. Target (1 key persona)
+   - 1 person including situation / context / pain points (1 key persona because Lean)
+3. Core features
+   - each feature → problem mapping (feature↔problem traceability table)
+4. User flow
+   - key flow only (no wireframes)
+5. MVP scope
+   - MVP included / Out-of-scope (explicitly excluded) separated
+   - priority + rationale
+6. Success metrics
+   - each metric: number + measurement tool + period + decision criteria
+7. Differentiation (brief)
+   - explicit comparison against at least 1 real competitor/alternative
 ```
 
-S1 확장(시장/수익모델). 와이어프레임은 일반적으로 비핵심 → STEP 7 보통 스킵(포함 시 발동).
+S3 light (key user flow only, no wireframes) → STEP 7 checkpoint generally skipped.
 
 ---
 
-## Mode 4 — 화면·기능 명세 중심
+## Mode 2 — Formal PRD
 
-유저플로우 / 화면별 기능 / 데이터 구조 중심. S3가 가장 무겁다(화면별 상세+데이터구조+와이어프레임).
+Mode 1 structure + functional spec / screen definition / edge cases / non-functional requirements. A formal product requirements document.
 
 ```
-1. 문제정의 (간략 — who-what-why, 명세 중심이라 압축)
-2. 타겟 (핵심 페르소나)
-3. 정보구조(IA) / 화면 목록
-4. 유저플로우 (전체 플로우 다이어그램 수준)
-5. 화면별 상세 명세
-   - 화면별: 목적 / 구성요소 / 인터랙션 / 상태(빈/로딩/에러) / 엣지케이스
-   - 와이어프레임/목업 블록 (→ STEP 7 인간 체크포인트 대상)
-6. 데이터 구조
-   - 주요 엔티티·필드·관계 (개념 수준; 구현 스택은 Generator가 소유하나 spec은 강제 안 함)
-7. 핵심기능 → 문제 매핑 추적표
-8. MVP 범위 (MVP 포함 / Out-of-scope 분리)
-9. 차별화 (최소 1개 경쟁 명시 비교)
-10. 성공지표 (각 지표 수치+측정방법)
+1. Problem definition (who-what-why)
+2. Target (personas, multiple if needed)
+3. Core features + functional spec
+   - each feature → problem mapping (traceability table)
+   - detailed spec per feature (input/processing/output/constraints)
+4. Screen definition
+   - per-screen purpose / components (wireframes possible → subject to STEP 7 gate)
+5. User flow
+   - normal flow + edge cases
+6. Edge cases / exception handling
+7. Non-functional requirements
+   - performance / security / accessibility / scalability, etc. (qualitative/quantitative criteria)
+8. MVP scope (MVP included / Out-of-scope separated, priority + rationale)
+9. Differentiation (explicit comparison against at least 1 competitor + comparison axes)
+10. Success metrics (each metric: number + measurement tool + period + decision criteria)
 ```
 
-S3 최중량(화면별 상세 + 데이터구조 + 와이어프레임) → STEP 7 인간 체크포인트 거의 항상 발동.
+Wireframes/mockups may be included in screen definition → if included, STEP 7 human checkpoint is triggered.
 
 ---
 
-## Mode 5 — 풀 기획 패키지 (Full Planning Package)
+## Mode 3 — Combined business + planning document
 
-IT 서비스 개발 프로젝트의 **전체 기획 산출물 세트**를 한 번에 생성한다. 단일 문서가 아니라 `docs/` 디렉터리에 번호 매긴 다중 문서. S1~S3 리서치를 공유한 뒤 S4가 **deliverable-그룹별 생성**으로 확장된다.
+Mode 2 structure + market / competition / revenue-model business-analysis sections. S1 is expanded (market size / segments / revenue model).
 
-> 모든 산출물 공통 비기능 요구(§8 게이트 G-a~G-f) 동일 적용. **단일 출처 원칙**: 수익·정산·가격 등 돈 규칙은 `00-business-model.md` 한 곳에서 확정하고 하위 문서(ERD·API·정책서)는 그대로 참조한다(중복 정의·모순 금지). 모든 문서는 상호 추적 가능해야 한다(기능↔문제↔화면↔데이터↔API 일관).
+```
+1. Executive Summary (1-page summary)
+2. Market analysis
+   - market size (TAM/SAM/SOM rationale), segments, trends
+3. Ecosystem analysis (ecosystem)
+   - all ecosystem participants (supply/demand side, platform/intermediary, complements/substitutes, regulators/institutions, payment/infrastructure/data partners) + each one's role / incentive / value exchange / dependency
+   - **ecosystem map (stakeholder / value-network diagram)** — visualize value/money/data flows among participants
+4. Competitive analysis
+   - multiple real competitors + comparison-axis matrix, moat/differentiation argument
+5. Revenue model
+   - pricing structure, unit-price / unit-economics assumptions, revenue hypotheses
+6. Problem definition (who-what-why)
+7. Target (personas)
+8. Core features + functional spec (feature↔problem traceability table)
+9. User flow / screen definition
+10. MVP scope (MVP included / Out-of-scope separated, priority + rationale)
+11. Differentiation (explicit competitor comparison + comparison axes + moat)
+12. Success metrics (business KPIs + product KPIs, each metric number + measurement method)
+13. Risks & assumptions
+```
 
-### 산출물 목록 (5단계 ~16종)
+S1 expanded (market / revenue model). Wireframes are usually non-core → STEP 7 usually skipped (triggered if included).
+
+---
+
+## Mode 4 — Screen/feature-spec focused
+
+Centered on user flow / per-screen features / data structure. S3 is the heaviest (per-screen detail + data structure + wireframes).
+
+```
+1. Problem definition (brief — who-what-why, compressed since spec-focused)
+2. Target (key persona)
+3. Information architecture (IA) / screen list
+4. User flow (overall flow diagram level)
+5. Per-screen detailed spec
+   - per screen: purpose / components / interaction / state (empty/loading/error) / edge cases
+   - wireframe/mockup blocks (→ subject to STEP 7 human checkpoint)
+6. Data structure
+   - main entities / fields / relationships (conceptual level; implementation stack is owned by the Generator but the spec does not force it)
+7. Core feature → problem mapping traceability table
+8. MVP scope (MVP included / Out-of-scope separated)
+9. Differentiation (explicit comparison against at least 1 competitor)
+10. Success metrics (each metric number + measurement method)
+```
+
+S3 heaviest (per-screen detail + data structure + wireframes) → STEP 7 human checkpoint almost always triggered.
+
+---
+
+## Mode 5 — Full Planning Package
+
+Generates the **entire set of planning deliverables** for an IT service development project in one go. Not a single document but numbered multiple documents in a `docs/` directory. After sharing S1–S3 research, S4 expands into **per-deliverable-group generation**.
+
+> The same non-functional requirements shared by all deliverables apply (§8 gates G-a–G-g, including infographic-first G-g). **Single-source-of-truth rule**: money rules such as revenue / settlement / pricing are finalized in one place, `00-business-model.md`, and downstream documents (ERD / API / policy) reference it as-is (no duplicate definition / contradiction). All documents must be mutually traceable (feature↔problem↔screen↔data↔API consistent).
+
+### Deliverable list (5 stages, ~16 types)
 
 ```
 docs/
-─ 발견·전략 (왜 만드나)
-  00-business-model.md       수익원·수수료·정산 트리거·유닛이코노믹스 (단일 출처)
-  01-service-plan.md         서비스 기획서 (문제·타겟·핵심가치·MVP범위·지표·차별화)
-  02-market-competition.md   시장·경쟁 분석 (S1 기반 정리)
-  03-personas.md             핵심 페르소나 (S2 기반)
-─ 정의 (뭘 만드나)
-  10-prd.md                  PRD — 기능 목록·우선순위·범위·비기능요구
-  11-user-stories.md         유저 스토리 / 요구사항 명세 ("~로서 ~하고 싶다" + 수용기준)
-  12-ia.md                   정보구조도(IA) — 화면·메뉴 위계 트리
-  13-user-flows.md           유저플로우 / 유저저니 (주요 경로 단계)
-─ 설계 (어떻게 보이나)
-  20-wireframes.md           와이어프레임 (저충실도 텍스트/ASCII — STEP 7 인간 체크포인트 대상)
-  21-screen-spec.md          화면설계서/스토리보드 — 화면별 기능·동작·상태·예외 (개발 직결)
-─ 기술 (개발 명세)
-  30-functional-spec.md      기능명세서 — 기능별 입력/처리/출력/제약
-  31-erd.md                  ERD / 데이터 모델 — 엔티티·필드·관계 (개념~논리 수준)
-  32-api-spec.md             API 명세 — 엔드포인트·요청/응답·에러
-  33-policy.md               정책서 — 권한·약관·과금/정산·예외 규칙 (00 참조)
-─ 실행·검증
-  40-backlog.md              백로그 / 스프린트 플랜 — 개발 단위·우선순위·일정
-  41-qa-testcases.md         QA 테스트 케이스 — 핵심 시나리오·기대결과
-─ 길잡이 + HTML (STEP 1-b 선택; md 항상 보존)
-  INDEX.md                   전체 산출물의 중요도 그룹핑 + 작업 순서 + 역할별 묶음 + 최소 착수 세트 (모든 문서 작성 완료 후 마지막에 생성).
-  index.html                 [문서별 HTML+허브 선택 시] 허브 — 중요도·순서·역할별 링크(INDEX.md 반영). `references/html-doc-template.md`.
-  00-…/01-… .html            [문서별 HTML+허브 선택 시] 각 `.md`의 읽기·공유·리뷰용 HTML(원본 .md 보존). `references/html-doc-template.md`.
-  overview.html              ["둘 다" 선택 시] 도식 종합 대시보드(마인드맵·차트·인포그래픽·웹툰). `references/html-visual-template.md`.
-  (또는) index.html          ["비주얼 대시보드만" 선택 시] index.html = 도식 종합 대시보드.
+─ Discovery / strategy (why are we building it)
+  00-business-model.md       revenue sources / fees / settlement triggers / unit economics (single source)
+  01-service-plan.md         service-planning document (problem / target / core value / MVP scope / metrics / differentiation)
+  02-market-competition.md   market / competition analysis (organized from S1)
+  03-personas.md             key personas (based on S2)
+─ Definition (what are we building)
+  10-prd.md                  PRD — feature list / priority / scope / non-functional requirements
+  11-user-stories.md         user stories / requirements spec ("as a ~, I want to ~" + acceptance criteria)
+  12-ia.md                   information architecture (IA) — screen/menu hierarchy tree
+  13-user-flows.md           user flow / user journey (main path steps)
+─ Design (how it looks)
+  20-wireframes.md           wireframes (low-fidelity text/ASCII — subject to STEP 7 human checkpoint)
+  21-screen-spec.md          screen spec / storyboard — per-screen feature/behavior/state/exception (directly tied to dev)
+─ Technical (development spec)
+  30-functional-spec.md      functional spec — per-feature input/processing/output/constraints
+  31-erd.md                  ERD / data model — entities / fields / relationships (conceptual~logical level)
+  32-api-spec.md             API spec — endpoints / request-response / errors
+  33-policy.md               policy — permissions / terms / billing-settlement / exception rules (references 00)
+─ Execution / verification
+  40-backlog.md              backlog / sprint plan — dev units / priority / schedule
+  41-qa-testcases.md         QA test cases — key scenarios / expected results
+─ Guide + HTML (STEP 1-b choice; md always preserved)
+  INDEX.md                   importance grouping + work order + per-role bundles + minimal start set across all deliverables (generated last, after all documents are written).
+  index.html                 [if per-doc HTML + hub chosen] hub — importance / order / per-role links (reflecting INDEX.md). `references/html-doc-template.md`.
+  00-…/01-… .html            [if per-doc HTML + hub chosen] each `.md`'s read/share/review HTML (original .md preserved). `references/html-doc-template.md`.
+  overview.html              [if "both" chosen] aggregate visual dashboard (mind maps / charts / infographics / webtoon). `references/html-visual-template.md`.
+  (or) index.html            [if "visual dashboard only" chosen] index.html = aggregate visual dashboard.
 ```
 
-### INDEX.md 생성 규칙 (모든 문서 작성 완료 후 마지막에 — g7)
+### INDEX.md generation rule (last, after all documents are written — g7)
 
-16종을 다 만든 뒤, 독자가 "무엇부터·누가·왜 읽는가"를 알 수 있게 `INDEX.md`를 생성한다. 문서를 위한 문서가 되지 않도록, **모드/도메인에 맞춰 실제 필요도를 판정**해 그룹핑한다. 다음 4개 블록을 포함한다:
+After making all 16 types, generate `INDEX.md` so the reader knows "what to read first / who / why". To avoid becoming a document for documents' sake, **judge actual necessity per mode/domain** and group accordingly. Include these 4 blocks:
 
-1. **중요도 3티어** (각 문서를 하나에 배치 + 한 줄 사유):
-   - **T1 필수** — 없으면 개발 착수 불가: `10-prd` · `13-user-flows` · `21-screen-spec` · `31-erd` · `32-api-spec` · `40-backlog` · `01-service-plan`.
-   - **T2 조건부 필수** — 도메인 따라 필수: `00-business-model`(과금/마켓/SaaS) · `33-policy`(결제·개인정보·규제) · `41-qa-testcases` · `30-functional-spec`. (해당 서비스에서 필수면 T1로 승격해 표기.)
-   - **T3 보조** — 정렬·설득·온보딩용: `02-market-competition` · `03-personas` · `11-user-stories` · `12-ia` · `20-wireframes`.
-   - 판정은 고정이 아니다. 예: 결제 서비스면 `33-policy`·`00-business-model`을 T1로, 내부 관리툴이면 `02`·`03`을 생략/T3로. INDEX는 이 서비스 기준 실제 티어를 적는다.
+1. **3 importance tiers** (place each document in one + one-line rationale):
+   - **T1 essential** — can't start development without it: `10-prd` · `13-user-flows` · `21-screen-spec` · `31-erd` · `32-api-spec` · `40-backlog` · `01-service-plan`.
+   - **T2 conditionally essential** — essential depending on domain: `00-business-model` (billing/marketplace/SaaS) · `33-policy` (payment / personal data / regulation) · `41-qa-testcases` · `30-functional-spec`. (If essential for this service, promote to T1 in the notation.)
+   - **T3 supporting** — for alignment / persuasion / onboarding: `02-market-competition` · `03-personas` · `11-user-stories` · `12-ia` · `20-wireframes`.
+   - The judgment is not fixed. E.g.: for a payment service make `33-policy` · `00-business-model` T1; for an internal admin tool omit `02` · `03` or move to T3. INDEX records the actual tiers for this service.
 
-2. **작업 순서** (의존성 기반, 번호 매김): ① `00`(돈 규칙 단일출처 먼저 고정) → ② `01`·`02`·`03`(왜/누구) → ③ `10`→`11`(무엇) → ④ `12`→`13`→`20`→`21`(어떻게 보이나) → ⑤ `30`→`31`→`32`→`33`(어떻게 도나, `00` 참조) → ⑥ `40`→`41`(실행·검증) → ⑦ `index.html`(시각 종합). 의존이 바뀌면 순서도 조정.
+2. **Work order** (dependency-based, numbered): ① `00` (fix the money rules single-source first) → ② `01` · `02` · `03` (why/who) → ③ `10`→`11` (what) → ④ `12`→`13`→`20`→`21` (how it looks) → ⑤ `30`→`31`→`32`→`33` (how it works, referencing `00`) → ⑥ `40`→`41` (execution / verification) → ⑦ `index.html` (visual aggregate). If dependencies change, adjust the order.
 
-3. **역할별 묶음** (한 사람이 16종을 다 읽지 않는다):
-   - 개발자: `21`·`31`·`32`·`30`·`40`
-   - QA: `11`(수용기준)·`41`·`13`
-   - 디자이너: `12`·`13`·`20`·`21`·`03`
-   - 기획/PO: `01`·`10`·`40`
-   - 경영/투자: `00`·`02`·`03`
+3. **Per-role bundles** (no single person reads all 16 types):
+   - Developer: `21` · `31` · `32` · `30` · `40`
+   - QA: `11` (acceptance criteria) · `41` · `13`
+   - Designer: `12` · `13` · `20` · `21` · `03`
+   - Planning/PO: `01` · `10` · `40`
+   - Management/investors: `00` · `02` · `03`
 
-4. **최소 착수 세트** (Lean — 이것만으로도 개발 시작 가능): `10-prd` · `13-user-flows` · `21-screen-spec` · `31-erd` · `32-api-spec` · `40-backlog`. + 과금형이면 `00` 추가. "전부는 킥오프·납품·규제용, 평소엔 이 세트로 충분"임을 명시.
+4. **Minimal start set** (Lean — enough to start development with just these): `10-prd` · `13-user-flows` · `21-screen-spec` · `31-erd` · `32-api-spec` · `40-backlog`. + add `00` if billing-type. State that "the full set is for kickoff / delivery / regulation, and this set is enough day-to-day".
 
-각 문서명 옆에 한 줄 용도, 그리고 T1/T2/T3 배지를 붙인다. INDEX.md는 신규 내용 생성 금지 — 기존 산출물을 분류·정렬만 한다.
+Attach a one-line purpose next to each document name, plus a T1/T2/T3 badge. INDEX.md must not generate new content — it only classifies/sorts existing deliverables.
 
-### 각 산출물 골격 (요지)
+### Skeleton of each deliverable (gist)
 
-- **00 business-model**: 수익원 표 / 자금 흐름 / take-rate 정당화 / 유닛이코노믹스(예시 계산) / 정산 트리거 표(이벤트→누가→얼마→언제) / Phase 구분 / 가정·리스크.
-- **01 service-plan**: Mode 1 7섹션(문제·타겟·기능·플로우·MVP범위·지표·차별화) + 수익모델 섹션(00 링크).
-- **02 market-competition**: 실명 경쟁자 매트릭스 + 비교축 + 시장 맥락 + 공백/기회.
-- **03 personas**: 공급/수요 핵심 페르소나(상황·페인포인트·빈도·결과) + 가치순환.
-- **10 prd**: 기능 ID 목록 + 우선순위(P0/P1/P2) + 각 기능 요약 + 비기능요구(성능·보안·접근성) + 범위/비범위.
-- **11 user-stories**: Epic→Story 계층, 각 스토리에 수용기준(Given-When-Then) + 연결 기능 ID.
-- **12 ia**: 화면/메뉴 위계 트리 + 화면 ID 부여 + 권한별 노출.
-- **13 user-flows**: 주요 플로우(역할별) 단계 + 분기 + 각 단계 화면 ID·기능 ID 연결.
-- **20 wireframes**: 핵심 화면 저충실도 레이아웃(텍스트/ASCII 블록) — **시각 craft는 LLM 한계라 STEP 7에서 사용자 검토·승인 필요**.
-- **21 screen-spec**: 화면별 — 목적/구성요소/인터랙션/상태(빈·로딩·에러)/예외/연결 기능·API.
-- **30 functional-spec**: 기능별 입력·처리·출력·제약·검증규칙·예외처리.
-- **31 erd**: 엔티티 목록 + 필드(타입·제약) + 관계(1:N 등) + 주요 인덱스 후보. 텍스트 표/관계 기술.
-- **32 api-spec**: 리소스별 엔드포인트(method·path) + 요청/응답 스키마 + 상태코드·에러 + 인증.
-- **33 policy**: 권한 매트릭스 / 과금·정산 규칙(00 참조) / 약관 핵심 / 환불·분쟁 / 모더레이션 / 데이터·프라이버시.
-- **40 backlog**: Epic→스프린트 배치(MVP 4주 가정 시 주차별) + 의존성 + 추정(상/중/하).
-- **41 qa-testcases**: 핵심 플로우별 테스트 케이스(전제·입력·기대결과·우선순위) + 엣지·예외.
+> Each document embeds the optimal visualization from the "infographic-first mapping" above into the body (G-g). md = ASCII diagrams / matrices, HTML = inline SVG, generated image when possible. Mermaid not recommended.
 
-S3가 무겁고(IA·플로우·화면), S4가 위 16종으로 확장된다. 20-wireframes 포함 → **STEP 7 인간 체크포인트 거의 항상 발동.**
+- **00 business-model**: revenue-sources table / **money-flow diagram** / take-rate justification / unit economics (example calculation + bar/donut) / **settlement trigger sequence** (event→who→how much→when) / phase breakdown / assumptions / risks.
+- **01 service-plan**: Mode 1's 7 sections (problem / target / features / flow / MVP scope / metrics / differentiation) + revenue-model section (link to 00) (**structure mind map** + **value loop** + MVP↔Phase2 quadrant).
+- **02 market-competition**: **ecosystem analysis (all participants / roles / incentives / value exchange / dependencies) + ecosystem map (stakeholder / value-network diagram)** + named-competitor matrix (✓/△/✗) + positioning quadrant + comparison axes + market context + gaps/opportunities.
+- **03 personas**: supply/demand key personas (situation / pain points / frequency / outcome) + **persona journey map** + value loop + (when possible) **explainer webtoon panel image**.
+- **10 prd**: feature ID list + priority (P0/P1/P2) + summary per feature + non-functional requirements (performance / security / accessibility) + scope/out-of-scope (**feature mind map** priority colors + scope quadrant).
+- **11 user-stories**: Epic→Story hierarchy (**Epic-Story tree**), each story with acceptance criteria (Given-When-Then) + linked feature ID.
+- **12 ia**: screen/menu hierarchy tree (**IA tree diagram**, color by role) + screen ID assignment + exposure by permission.
+- **13 user-flows**: main flows (by role) steps + branches + each step linked to screen ID / feature ID (**user-flow flowchart** + key-session **sequence/state diagram**).
+- **20 wireframes**: low-fidelity layout of key screens (text/ASCII blocks, mockup image when possible) — **visual craft is an LLM limitation, so it needs user review/approval at STEP 7**.
+- **21 screen-spec**: per screen — purpose / components / interaction / state (empty / loading / error) / exception / linked feature / API (**state-transition diagram** + per-screen state table).
+- **30 functional-spec**: per-feature input / processing / output / constraints / validation rules / exception handling (**processing flowchart** — validation / exception branches).
+- **31 erd**: entity list + fields (type / constraint) + relationships (1:N, etc.) + main index candidates. **ERD diagram (entity boxes + relationship lines, inline SVG / md is ASCII)** + table (Mermaid not recommended).
+- **32 api-spec**: per-resource endpoints (method / path) + request/response schema + status codes / errors + auth (**API sequence diagram** client→API→DB→external + endpoint table).
+- **33 policy**: permission matrix (**heatmap**) / billing-settlement rules (references 00) / key terms / refund-dispute (**flowchart**) / consent flow (**sequence**) / moderation / data-privacy.
+- **40 backlog**: Epic→sprint allocation (weekly, assuming a 4-week MVP) + dependencies + estimation (high/medium/low) (**Gantt chart** — sprint allocation / critical-path emphasis).
+- **41 qa-testcases**: test cases per key flow (precondition / input / expected result / priority) + edge / exception (**test-coverage map** — mind map).
+
+S3 is heavy (IA / flows / screens), and S4 expands into the 16 types above. Includes 20-wireframes → **STEP 7 human checkpoint almost always triggered.**
 
 ---
 
-## 모드별 스프린트 범위 적응 요약
+## Per-mode sprint-scope adaptation summary
 
-| 모드 | S1 (시장·경쟁) | S2 (문제·타겟) | S3 (UX/UI 플로우) | S4 (통합) | STEP 7 와이어프레임 게이트 |
+| Mode | S1 (market / competition / ecosystem) | S2 (problem / target) | S3 (UX/UI flow) | S4 (integration) | STEP 7 wireframe gate |
 |------|----------------|----------------|-------------------|-----------|-----------------------------|
-| 1 Lean MVP | 최소 1개 경쟁 명시 | 1 핵심 페르소나 | 라이트 — 핵심 플로우만, 와이어프레임 없음 | Mode 1 구조 | 보통 스킵 |
-| 2 정식 PRD | 최소 1개 경쟁 명시 | 페르소나(복수 가능) | + 화면정의 + 엣지케이스 | Mode 2 구조 | 화면정의에 와이어프레임 포함 시 발동 |
-| 3 비즈니스+기획 | 확장 — 시장규모/세분/수익모델 | 페르소나 | 표준 플로우+화면 | Mode 3 구조 | 보통 스킵(포함 시 발동) |
-| 4 화면·기능 명세 | 최소 1개 경쟁 명시 | 핵심 페르소나 | 최중량 — 화면별 상세+데이터구조+와이어프레임 | Mode 4 구조 | 거의 항상 발동 |
-| 5 풀 기획 패키지 | 확장(경쟁 매트릭스→02 문서) | 복수 페르소나(→03 문서) | 무거움(IA·플로우·화면→12·13·20·21) | **다중 문서 ~16종**(S4가 deliverable-그룹별 확장) | 거의 항상 발동(20-wireframes) |
+| 1 Lean MVP | at least 1 explicit competitor + ecosystem participants/map | 1 key persona | light — key flow only, no wireframes | Mode 1 structure | usually skipped |
+| 2 Formal PRD | at least 1 explicit competitor + ecosystem map | personas (multiple possible) | + screen definition + edge cases | Mode 2 structure | triggered if wireframes included in screen definition |
+| 3 Business + planning | expanded — market size / segments / revenue model + ecosystem analysis/map | personas | standard flow + screens | Mode 3 structure | usually skipped (triggered if included) |
+| 4 Screen/feature spec | at least 1 explicit competitor + ecosystem map | key persona | heaviest — per-screen detail + data structure + wireframes | Mode 4 structure | almost always triggered |
+| 5 Full Planning Package | expanded (comparison matrix + ecosystem analysis/map → 02 document) | multiple personas (→ 03 document) | heavy (IA / flow / screens → 12 · 13 · 20 · 21) | **multiple documents ~16 types** (S4 expands per deliverable group) | almost always triggered (20-wireframes) |

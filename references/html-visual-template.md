@@ -1,92 +1,99 @@
 # HTML Visual Template — service-planning-harness
 
-> 최종 산출 단계에서, 생성된 기획 산출물(.md)을 **읽기 쉬운 + 도식 시각화 중심의 자체완결 HTML 대시보드**로 렌더한다.
-> 목표: 모든 산출물의 **구조를 한눈에**. 본문 복붙이 아니라 마인드맵·다이어그램·순서도·아키텍처·차트·인포그래픽·웹툰 패널로 구조와 핵심을 시각화하고, 상세는 접이식으로 둔다.
+> In the final output stage, render the generated planning deliverables (.md) as a **self-contained HTML dashboard that is easy to read and centered on diagram visualization**.
+> Goal: see **the structure of every deliverable at a glance**. Instead of copy-pasting the body text, visualize the structure and essentials with mind maps, ecosystem maps, diagrams, flowcharts, sequence diagrams, state-transition diagrams, ERDs, Gantt charts, architecture diagrams, charts, infographics, and webtoon panels (invent a topic-specific visualization when a standard diagram doesn't fit), and keep the details in collapsible sections. **Everything is inline SVG/CSS + generated images when possible — no external renderer (Mermaid etc.).** Because it's infographic-first, it is always included in the STEP 1-b default ("Both").
 
-## 언제 / 무엇을
+## When / What
 
-- **Mode 1~4 (단일 문서)**: `<service>-plan.html` 1파일 — 해당 모드 문서를 섹션화 + 모드에 맞는 시각화(아래 카탈로그에서 해당되는 것만).
-- **Mode 5 (풀 패키지)**: `docs/index.html` 1파일 — 5단계 16종을 시각화 카탈로그 13종으로 종합한 대시보드. (오케스트레이터: STEP 7 와이어프레임 체크포인트 직후, STEP 8 인도 전에 렌더.)
-- 렌더 입력 = 이미 PASS된 최종 산출물(.md). HTML은 **새 내용 생성 금지** — 기존 산출물의 구조·수치·관계만 시각화한다(자리표시자 0, 수치는 산출물·`00-business-model.md`에서만 인용).
+- **Modes 1–4 (single document)**: one `<service>-plan.html` file — section the document for that mode + visualizations matching the mode (only the applicable ones from the catalog below).
+- **Mode 5 (full package)**: one `docs/index.html` file — a dashboard that synthesizes the 5 stages / 16 document types into the 13-type visualization catalog. (Orchestrator: render right after the STEP 7 wireframe checkpoint, before STEP 8 delivery.)
+- Render input = the already-PASSED final deliverables (.md). The HTML **must not generate new content** — only visualize the structure, numbers, and relationships of the existing deliverables (zero placeholders; numbers cited only from the deliverables and `00-business-model.md`).
 
-## 기술 방침 (자체완결 1파일)
+## Technical policy (self-contained, one file, zero external dependencies)
 
-- 단일 `.html`. CSS/JS 인라인. 외부 의존은 **다이어그램용 Mermaid.js만** 허용(CDN: `https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js`, ESM import + `mermaid.initialize({startOnLoad:true, theme:'neutral'})`). 인포그래픽·차트·웹툰은 **인라인 SVG/CSS**(오프라인 동작).
-- 상단에 한 줄 주석: "다이어그램은 인터넷 필요(Mermaid CDN), 인포그래픽/차트는 오프라인 동작."
-- (완전 오프라인 요구 시: Mermaid를 인라인 번들로 넣거나, 다이어그램도 인라인 SVG로 대체.)
-- 절제된 팔레트 1 액센트(예: 인디고 #4f46e5 + 보조 틸). 다크 텍스트·라이트 배경. 시스템 폰트. 슬롭 금지 — 의도적으로 디자인된 인터널 대시보드 수준(여백·위계·스캔성).
+- A single `.html`. CSS/JS/SVG **all inline**. **Zero external dependencies** — every visualization (diagrams, flowcharts, sequence diagrams, ERDs, Gantt charts, ecosystem maps, charts, infographics, webtoons) is built with **hand-authored inline SVG/CSS**. **No external renderers/CDNs/plugins/web fonts such as Mermaid** (self-contained, offline, design control, Korean-safe).
+  - Why not Mermaid: external CDN dependency (breaks offline / on intranets) + auto-layout means weak control over design and Korean labels and it turns sloppy. Hand-written SVG meets the infographic-first quality bar.
+- **Generated images (when possible)**: for persona webtoons, ecosystem illustrations, concepts, etc., if you have image-generation capability, create them in `assets/` and embed via `<img>` (local relative path). Without that capability, fall back to inline SVG/CSS.
+- A one-line comment at the top: "Fully self-contained (inline SVG/CSS) — works offline, no external dependencies."
+- A restrained palette with one accent (e.g., indigo #4f46e5 + secondary teal). Dark text, light background. System fonts. No slop — at the level of a deliberately designed internal dashboard (whitespace, hierarchy, scannability).
 
-## 시각화 카탈로그 (산출물 → 시각화 → 기술)
+## Visualization catalog (deliverable → visualization → technique)
 
-| # | 시각화 | 소스 문서 | 기술 |
-|---|--------|-----------|------|
-| 1 | **전체 구조 마인드맵** (서비스→단계→문서/기능) | 전체 / PRD | Mermaid `mindmap` — 히어로에 배치, "한눈에 전체 구조" |
-| 2 | **핵심 루프/메커니즘 다이어그램** (예: 양면 가치순환) | 페르소나/기획서 | 인라인 SVG 원형 루프 (화살표·라벨) |
-| 3 | **수익/자금 흐름 인포그래픽** | 00-business-model | 인라인 SVG (split·풀 분배·금액·Phase 태그) |
-| 4 | **유닛이코노믹스 차트** (분해·BEP) | 00-business-model | 인라인 SVG bar/donut |
-| 5 | **경쟁 매트릭스 + 포지셔닝 산점도** | 02-market-competition | CSS heatmap(✓/△/✗ 컬러칩, 자사 행 강조) + 인라인 SVG 2축 scatter |
-| 6 | **페르소나 웹툰 패널** (상황→트리거→페인→해결) | 03-personas | CSS 만화 컷 + 말풍선/생각풍선 |
-| 7 | **유저플로우 순서도** (역할별 경로, 노드에 화면·기능 태그) | 13-user-flows | Mermaid `flowchart` (Phase2 점선) |
-| 8 | **IA 화면 트리** (화면ID 위계, 역할별 색) | 12-ia | Mermaid `flowchart TD` / graph |
-| 9 | **시스템 아키텍처** (클라이언트→API→데이터→외부 레이어) | 30/31/32 | Mermaid `flowchart TB` |
-| 10 | **ERD 다이어그램** (핵심 엔티티·관계) | 31-erd | Mermaid `erDiagram` (전체 엔티티 목록은 접이식) |
-| 11 | **성공지표 게이지/바 차트** (목표값) | 01/06 지표 | 인라인 SVG/CSS, 축별 색 |
-| 12 | **MVP vs Phase2 범위 인포그래픽** | 01/10 | CSS 2열 VS (포함/제외 색 구분) |
-| 13 | **백로그 간트** (스프린트 배치, 임계경로) | 40-backlog | Mermaid `gantt` |
-| (도메인 추가) | 시퀀스·상태도·퍼널·히트맵 등 | 해당 문서 | Mermaid / 인라인 SVG — 도메인에 맞게 창의적으로 |
+> Technique = **all inline SVG/CSS** (no external renderers such as Mermaid). Webtoons/illustrations use generated images (`assets/`) when possible, otherwise CSS/SVG.
 
-> Mode 1~4는 위 중 해당되는 것만(예: Mode 1 Lean → 1·2·5·7·11·12). Mode 5는 전부 + 도메인 추가.
+| # | Visualization | Source document | Technique (inline SVG/CSS) |
+|---|--------|-----------|------------------------|
+| 1 | **Overall structure mind map** (service → stage → document/feature) | All / PRD | Inline SVG radial node-edge — placed in the hero, "whole structure at a glance" |
+| 2 | **Core loop/mechanism diagram** (e.g., two-sided value cycle) | Persona / plan | Inline SVG circular loop (arrows, labels) |
+| 3 | **Ecosystem map** (participants, value network) | 02-market-competition | Inline SVG nodes (participants) + directed edges (value/money/data flow, labeled), own node highlighted |
+| 4 | **Revenue/money flow infographic** | 00-business-model | Inline SVG (split, pool distribution, amounts, Phase tags, Sankey-style) |
+| 5 | **Unit economics chart** (breakdown, BEP) | 00-business-model | Inline SVG bar/donut |
+| 6 | **Competition matrix + positioning scatter** | 02-market-competition | CSS heatmap (✓/△/✗ color chips, own row highlighted) + inline SVG 2-axis scatter |
+| 7 | **Persona webtoon panels** (situation → trigger → pain → resolution) | 03-personas | Generated image cuts when possible, otherwise CSS comic cuts + speech/thought bubbles |
+| 8 | **Persona journey map** (actions/emotions per stage) | 03-personas | Inline SVG horizontal timeline + emotion curve |
+| 9 | **User flow flowchart** (per-role paths, screen/feature tags on nodes) | 13-user-flows | Inline SVG node-edge (Phase 2 dashed) |
+| 10 | **API/consent/settlement sequence diagram** (participant lanes + message arrows) | 32/33/00 | Inline SVG lifelines + numbered arrows |
+| 11 | **State-transition diagram** (screen states: empty/loading/error/normal) | 21-screen-spec | Inline SVG state nodes + transition arrows |
+| 12 | **IA screen tree** (screen-ID hierarchy, color per role) | 12-ia | Inline SVG tree (TD) |
+| 13 | **System architecture** (client → API → data → external layers) | 30/31/32 | Inline SVG layer boxes + connectors |
+| 14 | **ERD diagram** (core entities, relationships) | 31-erd | Inline SVG entity boxes + 1:N relationship lines (crow's-foot) (full list collapsible) |
+| 15 | **Success-metric gauge/bar chart** (target values) | 01/06 metrics | Inline SVG/CSS, color per axis |
+| 16 | **MVP vs Phase 2 scope infographic** | 01/10 | CSS 2-column VS (included/excluded color-coded) |
+| 17 | **Backlog Gantt** (sprint placement, critical path) | 40-backlog | Inline SVG horizontal bar timeline + critical path highlighted |
+| (topic-specific invented) | When a standard diagram doesn't fit the concept, invent a visualization just for that topic (funnel, heatmap, ecosystem quadrant, etc.) | the relevant document | Inline SVG/CSS — creatively, fit to the domain |
 
-## 레이아웃
+> Modes 1–4 use only the applicable ones above (e.g., Mode 1 Lean → 1·2·3·6·9·15·16). Mode 5 uses all + topic-specific inventions. Every visualization is inline SVG/CSS (zero external dependencies).
 
-- 고정 좌측 **사이드바 TOC**(단계/문서 그룹, 점프) + 메인 스크롤(콘텐츠 max-width ~960px, line-height 1.7). 좁은 화면(<900px) 햄버거 토글.
-- 스티키 상단바: 서비스명 + 한줄 요약 + 메타(작성일·산출물 수) + `[🖨 인쇄/PDF]`(window.print).
-- 히어로: 한줄 가치 + 스탯카드(모드·산출물 수·MVP 기간·수익모델 한줄) + **전체 구조 마인드맵(#1)**.
-- 단계별 섹션: 각 섹션에 해당 시각화 + 그 아래 **접이식(`<details>`) 상세 핵심**(표·리스트·배지).
-- **배지**: 우선순위 P0(빨강)·P1(주황)·P2(회색), Phase MVP(초록)·Phase2(회색). ID 토큰(`F1`·`SC-02`·`P3`·`T1`·`E12`)은 monospace 칩으로 자동 스타일.
-- 인터랙션: 사이드바 active highlight(IntersectionObserver), 스무스 스크롤, 접이식 그룹.
+## Layout
 
-## 자체완결 스켈레톤 (슬롯 채워 사용)
+- Fixed left **sidebar TOC** (stage/document groups, jump) + main scroll (content max-width ~960px, line-height 1.7). Hamburger toggle on narrow screens (<900px).
+- Sticky top bar: service name + one-line summary + meta (date written, deliverable count) + `[🖨 Print/PDF]` (window.print).
+- Hero: one-line value + stat cards (mode, deliverable count, MVP duration, one-line revenue model) + **overall structure mind map (#1)**.
+- Per-stage sections: each section has its visualization + below it **collapsible (`<details>`) detailed essentials** (tables, lists, badges).
+- **Badges**: priority P0 (red)·P1 (orange)·P2 (gray), Phase MVP (green)·Phase 2 (gray). ID tokens (`F1`·`SC-02`·`P3`·`T1`·`E12`) auto-styled as monospace chips.
+- Interaction: sidebar active highlight (IntersectionObserver), smooth scroll, collapsible groups.
+
+## Self-contained skeleton (fill the slots)
 
 ```html
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{TITLE}} — 기획 대시보드</title>
+<title>{{TITLE}} — Planning dashboard</title>
 <style>
-/* 변수: --accent, --accent2, --bg, --fg, --muted, --line; 배지/칩/카드/표/웹툰/프린트 CSS */
-/* 레이아웃: .layout{display:grid;grid-template-columns:260px 1fr} .sidebar{position:sticky;top:0;height:100vh;overflow:auto} */
-/* 표: 래퍼 overflow-x:auto, zebra, sticky thead; pre: monospace 보존; .callout 강조 박스 */
+/* variables: --accent, --accent2, --bg, --fg, --muted, --line; badge/chip/card/table/webtoon/print CSS */
+/* layout: .layout{display:grid;grid-template-columns:260px 1fr} .sidebar{position:sticky;top:0;height:100vh;overflow:auto} */
+/* tables: wrapper overflow-x:auto, zebra, sticky thead; pre: preserve monospace; .callout highlight box */
 /* @media print{ .sidebar,.topbar,button{display:none} details{open} *{break-inside:avoid} main{width:100%} } */
 /* @media (max-width:900px){ .layout{grid-template-columns:1fr} .sidebar{position:fixed;transform:translateX(-100%)} .sidebar.open{transform:none} } */
 </style></head>
 <body>
-<header class="topbar">{{TITLE}} · {{ONELINE}} · {{META}} <button onclick="window.print()">🖨 인쇄/PDF</button></header>
+<header class="topbar">{{TITLE}} · {{ONELINE}} · {{META}} <button onclick="window.print()">🖨 Print/PDF</button></header>
 <div class="layout">
-  <nav class="sidebar" aria-label="목차">{{TOC}}</nav>
+  <nav class="sidebar" aria-label="TOC">{{TOC}}</nav>
   <main>
-    <section id="hero">{{ONELINE}} {{STAT_CARDS}} <div class="mermaid">{{MINDMAP}}</div></section>
+    <section id="hero">{{ONELINE}} {{STAT_CARDS}} <figure class="viz">{{MINDMAP_SVG}}</figure></section>
     {{MONEY_CALLOUT}}
-    {{SECTIONS}}  <!-- 단계별: 시각화(svg/mermaid/css) + <details> 상세 -->
+    {{SECTIONS}}  <!-- per stage: visualization (inline <svg>/CSS, or <img src="assets/..">) + <details> detail -->
   </main>
 </div>
-<script type="module">
-  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js";
-  mermaid.initialize({startOnLoad:true, theme:"neutral", securityLevel:"loose"});
-  // IntersectionObserver active TOC highlight; 햄버거 토글; beforeprint→ details[open]=true
+<script>
+  // inline SVG/CSS only — no external renderer/CDN (Mermaid not used).
+  // IntersectionObserver active TOC highlight; hamburger toggle; beforeprint → details[open]=true
 </script>
 </body></html>
 ```
+> Note: `lang="ko"` is a default; set it to match the chosen output language (deliverable language is user-selectable, default Korean — the HTML just renders whatever language the .md is in).
 
-## 규칙 (audit 시 확인)
+## Rules (check during audit)
 
-- **시각화가 주연**: 카탈로그의 해당 항목을 **실제 데이터로** 채운다(빈 다이어그램·자리표시자 금지).
-- **내용 충실·무생성**: 산출물의 구조·수치·관계만 시각화. 돈 규칙은 `00-business-model.md` 인용만(재정의 금지). 산출물에 없는 수치 발명 금지.
-- **자체완결**: 외부 의존은 Mermaid CDN 1개만. 더블클릭으로 열림. 인포그래픽은 오프라인 동작.
-- **프린트**: 사이드바/버튼 숨김, 접이식 펼침, page-break-inside avoid, Mermaid 렌더 SVG 인쇄.
-- **접근성**: 시맨틱 랜드마크(nav/main/header), aria 토글, 대비 충분, 포커스 스타일.
-- **한글**: 표·칩 word-break 안전, 오버플로 클리핑 없음.
-- 의도적으로 디자인된 대시보드 — 제네릭 부트스트랩 덤프 금지.
+- **Visualization is the lead**: fill the relevant catalog items **with real data** (no empty diagrams or placeholders).
+- **Content-faithful, no generation**: visualize only the deliverables' structure, numbers, and relationships. Money rules only cite `00-business-model.md` (no redefining). Don't invent numbers not in the deliverables.
+- **Self-contained**: zero external dependencies — all visualizations inline SVG/CSS, **no Mermaid/CDN/web fonts/plugins**. Images are local in `assets/`. Opens on double-click, works fully offline.
+- **Print**: hide sidebar/buttons, expand collapsibles, page-break-inside avoid, inline SVG prints as-is.
+- **Accessibility**: semantic landmarks (nav/main/header), aria toggles, sufficient contrast, focus styles.
+- **Korean**: tables/chips word-break safe, no overflow clipping.
+- A deliberately designed dashboard — no generic Bootstrap dump.
 
-## 참고 인스턴스
+## Reference instance
 
-`character-market/docs/index.html` (Mode 5, 시각화 13종, 1파일 ~86KB) — 이 템플릿의 실제 적용 예.
+`character-market/docs/index.html` (Mode 5, one file ~86KB) — for layout/composition reference. **However, if this instance used a Mermaid CDN, that conflicts with the current policy** — new deliverables must be entirely inline SVG/CSS (zero external renderers). Reference only its layout/information structure, and replace the diagram technique with inline SVG.

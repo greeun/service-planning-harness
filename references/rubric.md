@@ -1,51 +1,52 @@
 # Rubric — service-planning-harness
 
-> 평가 루브릭. service planning (서비스 기획) 산출물(service-planning document / 서비스 기획서)을 4축으로 채점한다.
-> Evaluator는 이 루브릭을 스프린트별 패스(관련 축만)와 최종 통합 패스(4축 전부)에서 사용한다.
-> 채점 보정(few-shot 1/3/5 앵커)은 `evaluator-calibration.md` 참조.
+> The evaluation rubric. Scores a service planning (서비스 기획) deliverable (service-planning document / 서비스 기획서) on 4 axes.
+> The Evaluator uses this rubric in the per-sprint pass (only the relevant axes) and the final integrated pass (all 4 axes).
+> For scoring calibration (the few-shot 1/3/5 anchors) see `evaluator-calibration.md`.
 
-## 설계 원칙 — "Claude가 약한 축에 가중치를 둔다" (Weight What Claude Lacks)
+## Design principle — "Weight What Claude Lacks"
 
-Claude는 기본적으로 구조·골격·technical correctness는 잘 채운다. 압박 없이 약한 것은 **독창성(originality)·구체성(specificity)·도메인 감각(domain taste)**이다. 따라서 그 약점 축에 2× 가중을 둔다. Claude가 섹션 골격을 기본으로 잘 채우는 축은 1×로 두되, §8 이진 게이트로 표면적 충족(섹션은 있으나 내용이 공허)을 차단한다.
+By default Claude fills structure, skeleton, and technical correctness well. What is weak without pressure is **originality, specificity, and domain taste**. So those weak axes get 2× weight. The axes where Claude fills the section skeleton well by default are left at 1×, but §8 binary gates block surface satisfaction (the section exists but the content is empty).
 
-스타일 자석 경고(Style Magnet Warning): 기준은 **품질(quality)**로 적되 **레퍼런스 명칭(reference)**으로 적지 않는다. "토스처럼", "북극성 지표 수준", "맥킨지급" 같은 브랜드/명칭 드롭은 Generator를 한 방향으로 수렴시키므로 금지. 품질 바는 평범한 말로 기술한다 (예: "최소 1개 실제 경쟁자와 명시 비교됐는가").
+Style Magnet Warning: write criteria as **quality**, not as a **reference name**. Brand/name drops like "like Toss", "north-star-metric level", "McKinsey-grade" converge the Generator onto one direction, so they are banned. State the quality bar in plain words (e.g., "compared explicitly against at least 1 real competitor").
 
-## 4개 평가 기준 (C1–C4)
+## The 4 evaluation criteria (C1–C4)
 
-| # | 기준 (Korean) | Weight | 측정 대상 | Claude 기본 약점 정당화 |
-|---|---------------|--------|-----------|--------------------------|
-| **C1** | **문제정의 명확성** | **1×** | 누구의 / 어떤 / 왜 문제인지 날카롭게 정의됐는가. 타겟 페르소나가 상황·페인포인트까지 구체적인가. | Claude는 구조화된 문제정의 섹션을 기본으로 잘 채운다(adequate by default) → 1×. 단, 타겟 구체성 게이트(G-b)로 추상 인구통계만의 합격을 막는다. |
-| **C2** | **차별화·독창성** | **2×** | 경쟁/대안 대비 명시적 차별점이 있는가. 최소 1개 실제 경쟁자와 명시 비교됐는가. | Claude는 압박 없으면 "기존 대비 더 편리/더 빠름" 식 무근거 일반론(table-stakes)으로 흐른다. originality·specificity 약점축 → 2× 확정. |
-| **C3** | **실행가능성(MVP범위)** | **2×** | 범위가 현실적·우선순위가 명확하며, MVP/비-MVP가 명시 분리돼 바로 착수 가능한가. | Claude는 압박 없으면 "전부 다 만들자"식 과대범위 또는 모호한 범위로 흐른다. actionability·specificity 약점축 → 2× 확정. |
-| **C4** | **성공지표 측정가능성** | **1×** | 모든 성공지표가 측정가능 수치 + 측정방법을 포함하는가. | Claude는 KPI 섹션 자체는 기본 생성한다(structure adequate) → 1×. 단, 측정성 게이트(G-d)로 "만족도 향상" 같은 비측정 지표를 FAIL 처리한다. |
+| # | Criterion (Korean) | Weight | What is measured | Justification for Claude's default weakness |
+|---|--------------------|--------|------------------|---------------------------------------------|
+| **C1** | **problem-definition clarity** (문제정의 명확성) | **1×** | Is whose / which / why problem defined sharply? Is the target persona concrete down to situation and pain points? | Claude fills a structured problem-definition section well by default (adequate by default) → 1×. But the target-specificity gate (G-b) prevents passing with abstract demographics only. |
+| **C2** | **differentiation/originality** (차별화·독창성) | **2×** | Is there an explicit differentiator vs competitors/alternatives? Is it explicitly compared against at least 1 real competitor? | Without pressure Claude drifts to ungrounded generalities like "more convenient/faster than existing options" (table-stakes). An originality/specificity weak axis → 2× confirmed. |
+| **C3** | **feasibility (MVP scope)** (실행가능성(MVP범위)) | **2×** | Is the scope realistic with clear priorities, and are MVP/non-MVP explicitly separated and immediately startable? | Without pressure Claude drifts to "let's build everything" over-scoping or vague scope. An actionability/specificity weak axis → 2× confirmed. |
+| **C4** | **success-metric measurability** (성공지표 측정가능성) | **1×** | Does every success metric include a measurable number + measurement method? | Claude generates the KPI section itself by default (structure adequate) → 1×. But the measurability gate (G-d) FAILs non-measurable metrics like "improve satisfaction". |
 
-**2× 가중 확정**: 2× 축 = **C2 차별화·독창성 + C3 실행가능성(MVP범위)**. C1·C4는 Claude가 섹션 골격을 기본으로 채우므로 1×로 두되, §8의 이진 게이트(G-a~G-f)로 표면적 충족을 차단한다.
+**2× weights confirmed**: the 2× axes = **C2 differentiation/originality + C3 feasibility (MVP scope)**. C1/C4 are left at 1× because Claude fills the section skeleton by default, but §8's binary gates (G-a~G-g) block surface satisfaction.
 
-## 점수 의미 (1–5)
+## Score meaning (1–5)
 
-| 점수 | 의미 |
-|------|------|
-| 5 | 기대 초과 — 까다로운 시니어 PM / 기획 리드가 감탄할 수준 |
-| 4 | 기대 충족 — 견고한 실무 품질 |
-| 3 | 수용 가능하나 눈에 띄게 약함 — 보완 필요 |
-| 2 | 기대 미달 — 유의미한 결손 |
-| 1 | 수용 불가 — 근본적 문제 |
+| Score | Meaning |
+|-------|---------|
+| 5 | Exceeds expectations — would impress a demanding senior PM / planning lead |
+| 4 | Meets expectations — solid practical quality |
+| 3 | Acceptable but noticeably weak — needs reinforcement |
+| 2 | Below expectations — meaningful gaps |
+| 1 | Unacceptable — fundamental problems |
 
-## Verdict Logic (판정 로직)
+## Verdict Logic
 
 ```
-모든 기준 ≥ 4 AND 적대적 probe clean AND §8 게이트 전부 통과 → PASS
-2×-가중 기준(C2/C3) 중 하나라도 < 4                        → FAIL  (이게 핵심이다)
-1×-가중 기준(C1/C4) 중 하나라도 < 3                        → FAIL
-Definition-of-Done 항목 또는 §8 게이트가 미검증/실패        → FAIL
+All criteria ≥ 4 AND adversarial probes clean AND all §8 gates pass → PASS
+Any 2×-weighted criterion (C2/C3) < 4                              → FAIL  (this is the core rule)
+Any 1×-weighted criterion (C1/C4) < 3                              → FAIL
+Any Definition-of-Done item or §8 gate unverified/failed          → FAIL
 ```
 
-## 보정 체크포인트 (Calibration Checkpoint)
+## Calibration Checkpoint
 
-채점 후 모든 축이 ≥4면, 통과 직전 다음 2차 렌즈를 적용해 발견을 critique에 추가한다:
+After scoring, if every axis is ≥4, apply the following second-pass lenses just before passing and add findings to the critique:
 
-1. **도메인 전문가 렌즈**: "까다로운 시니어 PM / 기획 리드라면 무엇을 잡아낼까?"
-2. **경쟁자 렌즈**: "경쟁사라면 이 기획의 어디를 약점으로 지적할까?"
-3. **사용자 렌즈**: "타겟 사용자가 실제로 이 서비스를 쓸 만하다고 느낄까?"
+1. **Domain-expert lens**: "What would a demanding senior PM / planning lead catch?"
+2. **Competitor lens**: "Where would a competitor point out this plan as a weakness?"
+3. **User lens**: "Would the target user actually feel this service is worth using?"
+4. **Infographic lens**: "Is content that has structure (hierarchy / flow / relationship / timeline / comparison / state transition) conveyed as a diagram/infographic, or is it a text wall?" — structure that would be conveyed better by a diagram but is left as prose/table only docks C1 (clarity) and C3 (readability/actionability). The presence and fit of visualization itself is separately enforced by the §8 gate **G-g (infographic fit, binary)** (empty diagram / external-renderer dependence such as Mermaid = FAIL).
 
-스프린트별 패스에서는 해당 스프린트와 연결된 축만 채점한다 (S1→C2, S2→C1, S3→C1 일부 + 와이어프레임 게이트, S4/최종→4축 전부). 매핑 상세는 `evaluator-prompt.md` 및 `sprint-playbook.md` 참조.
+In the per-sprint pass, score only the axes tied to that sprint (S1→C2, S2→C1, S3→part of C1 + wireframe gate, S4/final→all 4 axes). For the mapping details see `evaluator-prompt.md` and `sprint-playbook.md`.

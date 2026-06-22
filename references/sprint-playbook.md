@@ -1,100 +1,107 @@
 # Sprint Playbook — service-planning-harness (Full tier)
 
-> REQUIRED Full-tier 파일. 4개 고정 리서치 스프린트의 계획, 각 스프린트의 deliverable 파일, 모드 적응 범위, 관측가능 체크를 정의한다.
-> Planner가 STEP 3에서 사용자 선택 모드를 반영해 이 플레이북의 인스턴스를 `sprint-playbook.md`로 출력한다(아래 구조 + 모드 적응 범위를 채워서). Generator는 각 스프린트 시작 시 이 플레이북을 읽고 `sprint_contract.md`를 제안하며, Evaluator는 이 플레이북의 관측가능 바에 비추어 계약을 승인/수정하고 스프린트 산출물을 평가한다.
+> REQUIRED Full-tier file. Defines the plan for the 4 fixed research sprints, each sprint's deliverable file, the mode-adapted scope, and the observable checks.
+> In STEP 3, the Planner reflects the user-selected mode and outputs an instance of this playbook as `sprint-playbook.md` (filling in the structure below + the mode-adapted scope). At the start of each sprint the Generator reads this playbook and proposes a `sprint_contract.md`; the Evaluator approves/amends the contract against this playbook's observable bars and evaluates the sprint deliverable.
 
-## 왜 4 스프린트인가 (Full tier 정당화)
+## Why 4 sprints (Full-tier justification)
 
-서비스 기획은 **리서치-페이즈 분해 + 페이즈별 품질 게이팅**을 요구한다. 약한 시장조사/문제정의 위에 기획서를 쌓으면 차별화(C2)·실행가능성(C3)이 구조적으로 무너진다. 따라서 S1–S3 리서치 산출물을 Evaluator가 게이트로 통과시킨 **뒤에만** S4가 그 위에서 기획서를 합성한다. 이 게이팅은 컨텍스트 완화 목적이 아니라 직교적(orthogonal) 품질 메커니즘이다 (모델 강함이 이 가정을 무효화하지 않음 — SKILL.md 모델 가이던스 참조).
+A service-planning document requires **research-phase decomposition + per-phase quality gating**. If you stack a planning document on top of weak market research / problem definition, differentiation (C2) and feasibility (C3) collapse structurally. So **only after** the Evaluator passes the S1–S3 research deliverables through gates does S4 synthesize the planning document on top of them. This gating is not for context relief — it is an orthogonal quality mechanism (a stronger model does not invalidate this assumption — see the SKILL.md model guidance).
 
-## 4개 고정 스프린트
+## 4 fixed sprints
 
-모든 모드에서 4개 스프린트가 **항상** 실행된다. 각 스프린트의 `sprint_contract.md` 범위가 선택 모드에 따라 적응한다.
+In every mode the 4 sprints **always** run. Each sprint's `sprint_contract.md` scope adapts to the selected mode.
 
-### S1 — 자료조사 / 시장·경쟁 리서치 → `research-s1.md`
+### S1 — research / market·competition research → `research-s1.md`
 
-- **목적**: 시장 맥락 + 최소 1개 실제 경쟁자/대안 특정 + 벤치마크. 차별화(C2)의 근거가 된다.
-- **Feeds**: C2, §8 게이트 G-c (차별화 명시 비교).
-- **관측가능 체크 (계약에 포함될 바)**:
-  - 최소 1개 **실제(이름 있는)** 경쟁자/대안이 특정됐다.
-  - 각 경쟁자에 대해 비교축(무엇을 하고/안 하는지)이 기록됐다.
-  - 시장/사용자 맥락이 기술됐다.
-- **모드 적응 범위**:
-  - Mode 3 (비즈니스+기획): 확장 — 시장규모(TAM/SAM/SOM 근거)·세분시장·수익모델 분석까지.
-  - Modes 1/2/4: 최소 — "최소 1개 명시 경쟁 비교" + 맥락.
-- **Evaluator 스프린트 패스**: C2 채점 + G-c 게이트 + 차별화 명시 비교 probe.
+- **Purpose**: market context + identify at least 1 real competitor/alternative + benchmark + **ecosystem·participant analysis**. Provides the basis for differentiation (C2).
+- **Feeds**: C2, §8 gates G-c (explicit differentiation comparison), G-g (ecosystem map).
+- **Observable checks (bars to include in the contract)**:
+  - At least 1 **real (named)** competitor/alternative is identified.
+  - For each competitor, a comparison axis (what it does / does not do) is recorded.
+  - Market/user context is described.
+  - **The full set of ecosystem participants** (supply/demand side, platforms·intermediaries, complements·substitutes, regulators·institutions, payment·infrastructure·data partners) is identified along with their roles·incentives·value exchange·dependencies.
+  - An **ecosystem map (stakeholder / value network diagram)** is visualized (infographic-first, G-g — no text wall,
+    no dependence on external renderers such as Mermaid).
+- **Mode-adapted scope**:
+  - Mode 3 (business + planning): expanded — market sizing (TAM/SAM/SOM basis)·segments·revenue model·ecosystem analysis included.
+  - Modes 1/2/4: minimal — "at least 1 explicit competitive comparison" + context + ecosystem participants·map.
+- **Evaluator sprint pass**: C2 scoring + G-c/G-g gates + explicit differentiation comparison probe + ecosystem/visualization fitness probe.
 
-### S2 — 문제·타겟·페르소나 리서치 → `research-s2.md`
+### S2 — problem·target·persona research → `research-s2.md`
 
-- **목적**: who-what-why 문제정의 + 구체 페르소나(상황·페인포인트). 문제정의 명확성(C1)의 근거.
-- **Feeds**: C1, §8 게이트 G-a(추적의 출발점인 문제 목록), G-b (타겟 구체성).
-- **관측가능 체크**:
-  - 문제가 누구의/어떤/왜 형태로 날카롭게 정의됐다.
-  - 최소 1명 페르소나가 상황·맥락·페인포인트(빈도/결과 포함)까지 구체적이다 — 추상 인구통계만이면 불합격.
-- **모드 적응 범위**:
-  - Mode 1 (Lean): 1 핵심 페르소나로 린하게.
-  - Modes 2/3/4: 필요 시 복수 페르소나, 단 핵심 1명은 반드시 구체.
-- **Evaluator 스프린트 패스**: C1 채점 + G-a(문제 목록 존재)/G-b 게이트 + 타겟 구체성 probe.
+- **Purpose**: who-what-why problem definition + concrete persona (situation·pain points). Basis for problem-definition clarity (C1).
+- **Feeds**: C1, §8 gates G-a (the problem list that is the starting point for tracing), G-b (target specificity).
+- **Observable checks**:
+  - The problem is sharply defined in who/what/why form.
+  - At least 1 persona is concrete down to situation·context·pain points (including frequency/consequence) — abstract demographics alone fail.
+- **Mode-adapted scope**:
+  - Mode 1 (Lean): lean with 1 core persona.
+  - Modes 2/3/4: multiple personas as needed, but the 1 core persona must be concrete.
+- **Evaluator sprint pass**: C1 scoring + G-a (problem list exists)/G-b gates + target specificity probe.
 
-### S3 — UX/UI 플로우·화면 리서치 → `research-s3.md`
+### S3 — UX/UI flow·screen research → `research-s3.md`
 
-- **목적**: 유저플로우 + 화면별 기능 + (모드에 따라) 와이어프레임/화면 구조.
-- **Feeds**: 와이어프레임 게이트(STEP 7 / P-1), G-a (기능↔문제 추적의 기능 후보).
-- **관측가능 체크**:
-  - 핵심 유저플로우가 정의됐다.
-  - 화면/단계별 기능이 정리됐다.
-  - (모드에 따라) 와이어프레임/화면 구조 블록 존재 여부.
-- **모드 적응 범위**:
-  - Mode 1 (Lean): 라이트 — 핵심 유저플로우만, **와이어프레임 없음**.
-  - Mode 2 (PRD): + 화면정의 + 엣지케이스.
-  - Mode 3 (비즈니스): 표준 플로우 + 화면.
-  - Mode 4 (화면·기능 명세): **최중량** — 화면별 상세 기능 + 데이터 구조 + 와이어프레임.
-- **Evaluator 스프린트 패스**: C1 일부(플로우↔문제 정합) + 와이어프레임 존재 시 `HUMAN_CHECKPOINT_REQUIRED` 표시(시각 부분은 점수화하지 않음, P-1).
+- **Purpose**: user flows + per-screen features + (depending on mode) wireframes / screen structure.
+- **Feeds**: wireframe gate (STEP 7 / P-1), G-a (feature candidates for feature↔problem tracing).
+- **Observable checks**:
+  - Core user flows are defined (visualized as a **user-flow flowchart** + a **sequence/state diagram** for the core session — G-g).
+  - Per-screen/step features are organized (**IA tree diagram**).
+  - (Depending on mode) whether wireframe / screen-structure blocks exist.
+  - **Persistent UI/screen/design visuals (required)**: S3 is the core UI/UX·screen-spec sprint — screens·flows·IA must not be left as prose explanation only and must be accompanied by visuals (wireframes·layouts·state-transition diagrams·flows·component diagrams·mockup images when possible).
+- **Mode-adapted scope**:
+  - Mode 1 (Lean): light — core user flows only, **no wireframes**.
+  - Mode 2 (PRD): + screen definitions + edge cases.
+  - Mode 3 (business): standard flows + screens.
+  - Mode 4 (screen·feature spec): **heaviest** — detailed per-screen features + data structures + wireframes.
+- **Evaluator sprint pass**: part of C1 (flow↔problem consistency) + G-g (flow·screen diagram fitness) + when wireframes exist, mark `HUMAN_CHECKPOINT_REQUIRED` (the visual part is not scored, P-1).
 
-### Mode 5 (풀 기획 패키지) 스프린트 적응
+### Mode 5 (full planning package) sprint adaptation
 
-Mode 5는 단일 문서가 아니라 ~16종 산출물 세트다. 4개 스프린트는 그대로 돌되 범위가 확장된다:
-- **S1**: 경쟁 매트릭스를 `02-market-competition.md`로 정리(확장).
-- **S2**: 페르소나를 `03-personas.md`로(복수 가능). 문제 목록은 PRD·유저스토리의 앵커.
-- **S3**: IA·유저플로우·화면·**와이어프레임**까지 무겁게 → `12-ia.md`/`13-user-flows.md`/`20-wireframes.md`/`21-screen-spec.md`의 리서치 토대. 와이어프레임 존재 → STEP 7 발동.
-- **S4**: **deliverable-그룹별로 확장**된다(통합작성이 단일 문서가 아니라 그룹별 다중 문서). 권장 그룹 분할(각 그룹 = sprint_contract 1건 + Evaluator 패스 1건):
-  - S4-g1 발견·전략: 00-business-model(단일 출처 먼저 확정), 01-service-plan, 02, 03
-  - S4-g2 정의: 10-prd, 11-user-stories, 12-ia, 13-user-flows
-  - S4-g3 설계: 20-wireframes, 21-screen-spec (STEP 7 인간 체크포인트 대상)
-  - S4-g4 기술: 30-functional-spec, 31-erd, 32-api-spec, 33-policy (00 참조, 상호 정합)
-  - S4-g5 실행: 40-backlog, 41-qa-testcases
-  - S4-g6 HTML 산출(STEP 1-b 선택; md 항상 보존, g1~g5 PASS + STEP 7 통과 후): **문서별 HTML+허브**[기본]=각 `.md`→읽기용 `NN-name.html`+허브 `index.html`(`references/html-doc-template.md`, INDEX.md 반영) / **둘 다**=위 + 도식 `overview.html`(`html-visual-template.md`) / **대시보드만**=`index.html` 도식 종합(`html-visual-template.md`) / **없음**=스킵. 전부 신규 내용 생성 금지(기존 산출물 변환·시각화만).
-  - S4-g7 길잡이: `INDEX.md` — **모든 문서(g1~g6) 완성 후 맨 마지막**에 생성. 전 산출물의 중요도 3티어 그룹핑(T1 필수 / T2 조건부 / T3 보조) + 작업 순서(의존성 기반) + 역할별 묶음 + 최소 착수 세트(Lean). `references/mode-templates.md`의 "INDEX.md 생성 규칙" 따름. 도메인에 맞춰 실제 티어 판정(결제형이면 33·00을 T1로 등). 신규 내용 생성 금지 — 분류·정렬만.
-  - **순서 강제**: g1(특히 00-business-model 돈 규칙)이 먼저 확정돼야 g4(ERD·API·정책서)가 그 위에 정합하게 쌓인다. 돈 규칙은 한 곳(00)에서만 정의. g6 HTML → g7 INDEX 순으로 항상 마지막.
+Mode 5 is not a single document but a set of ~16 deliverables. The 4 sprints run as is but with expanded scope:
+- **S1**: competition matrix + **ecosystem analysis·ecosystem map** organized into `02-market-competition.md` (expanded).
+- **S2**: personas into `03-personas.md` (multiple allowed). The problem list is the anchor for the PRD·user stories.
+- **S3**: IA·user flows·screens·**wireframes** done heavily → research foundation for `12-ia.md`/`13-user-flows.md`/`20-wireframes.md`/`21-screen-spec.md`. Wireframes existing → triggers STEP 7.
+- **S4**: expanded **per deliverable-group** (integration writing is not a single document but multiple documents per group). Recommended group split (each group = 1 sprint_contract + 1 Evaluator pass):
+  - S4-g1 discovery·strategy: 00-business-model (lock the single source of truth first), 01-service-plan, 02, 03
+  - S4-g2 definition: 10-prd, 11-user-stories, 12-ia, 13-user-flows
+  - S4-g3 design: 20-wireframes, 21-screen-spec (subject to the STEP 7 human checkpoint)
+  - S4-g4 technical: 30-functional-spec, 31-erd, 32-api-spec, 33-policy (reference 00, mutually consistent)
+  - S4-g5 execution: 40-backlog, 41-qa-testcases
+  - S4-g0 image assets (when possible, infographic-first tier ①): if image-generation capability exists, produce persona webtoons·ecosystem illustrations·concepts etc. into `docs/assets/` and reference them from the relevant md/HTML. If no capability, fall back to inline SVG/ASCII (skippable).
+  - S4-g6 HTML output (STEP 1-b choice; md always preserved, after g1~g5 PASS + STEP 7 clearance): **both**[default] = each `.md`→readable `NN-name.html` (ASCII preserved + inline SVG infographics + generated images) + hub `index.html` (`references/html-doc-template.md`, reflecting INDEX.md) + diagram synthesis `overview.html` (`html-visual-template.md`) / **dashboard only** = `index.html` diagram synthesis (`html-visual-template.md`) / **per-document HTML only** = overview omitted / **none** = skip. No new content generation at all (only conversion·visualization of existing deliverables), 0 dependence on external renderers (Mermaid not recommended).
+  - S4-g7 guide: `INDEX.md` — generated **last, after all documents (g1~g6) are complete**. 3-tier importance grouping of all deliverables (T1 essential / T2 conditional / T3 supporting) + work order (dependency-based) + per-role bundles + minimal starting set (Lean). Follows the "INDEX.md generation rules" in `references/mode-templates.md`. Judge the actual tiers per domain (e.g., for a payment type, 33·00 as T1). No new content generation — classification·sorting only.
+  - **Order enforcement**: g1 (especially the 00-business-model money rules) must be locked first so g4 (ERD·API·policy doc) can stack consistently on top of it. Money rules are defined in only one place (00). Always last in the order g6 HTML → g7 INDEX.
 
-### S4 — 기획서 통합작성 → `service-plan.md` (최종 산출물; Mode 5는 위 그룹별 다중 문서)
+### S4 — planning document integration writing → `service-plan.md` (final deliverable; Mode 5 is the per-group multiple documents above)
 
-- **목적**: S1–S3 리서치를 선택 모드 구조(`mode-templates.md`)로 통합. **신규 리서치 없음, 통합 + 범위/우선순위/지표 확정만.** (Mode 5는 `docs/` 다중 문서로 확장.)
-- **Feeds**: C3, §8 게이트 G-a/G-d/G-e (그리고 전체 G-f 자리표시자).
-- **관측가능 체크 / Definition of Done**:
-  - 선택 모드의 모든 섹션이 실제 내용으로 채워졌다(자리표시자 0개 — G-f).
-  - 모든 핵심기능이 문제정의의 특정 문제에 매핑됐다(기능↔문제 추적표 — G-a).
-  - MVP / Out-of-scope가 명시 분리됐다(G-e), 우선순위에 근거가 있다.
-  - 모든 성공지표에 측정가능 수치 + 측정방법(도구/기간/판별 기준)이 붙었다(G-d).
-  - 차별화 섹션이 최소 1개 실제 경쟁과 명시 비교한다(G-c, S1 근거 활용).
-  - 섹션 간 정합성이 교차 점검됐다.
-- **Evaluator 패스**: 이 스프린트 패스 + **STEP 5 최종 통합 패스에서 4축 전부 + 7 probe + §8 6게이트 전부**.
+- **Purpose**: integrate the S1–S3 research into the selected mode structure (`mode-templates.md`). **No new research, integration + scope/priority/metrics finalization only.** (Mode 5 expands into multiple documents under `docs/`.)
+- **Feeds**: C3, §8 gates G-a/G-d/G-e/G-g (and the placeholder slot for all of G-f).
+- **Observable checks / Definition of Done**:
+  - All sections of the selected mode are filled with real content (0 placeholders — G-f).
+  - Every core feature is mapped to a specific problem in the problem definition (feature↔problem tracing table — G-a).
+  - MVP / Out-of-scope are explicitly separated (G-e), and priorities are justified.
+  - Every success metric has a measurable number + measurement method (tool/period/criterion) attached (G-d).
+  - The differentiation section explicitly compares against at least 1 real competitor (G-c, leveraging the S1 basis).
+  - Each document/section that has structure embeds a concept-fit visualization (diagram·infographic) (G-g — 0 text walls, 0 empty diagrams,
+    0 dependence on external renderers such as Mermaid; generated images when possible).
+  - Cross-section consistency is cross-checked.
+- **Evaluator pass**: this sprint pass + **in the STEP 5 final integration pass, all 4 axes + 8 probes + all 7 §8 gates**.
 
-## 스프린트 루프 (각 스프린트 공통)
+## Sprint loop (common to each sprint)
 
 ```
-1) Generator: sprint_contract.md 제안 (deliverable + 관측가능 체크 + 출력 파일/포맷, 모드 적응)
-2) Evaluator: 계약 승인 또는 수정 (체크가 spec/playbook 바보다 약하면 강화) — 승인 전 빌드 금지
-3) Generator: 스프린트 산출물 작성 → self-verify(계약 체크 전부) → generator_report.md → READY_FOR_QA
-4) Evaluator: 산출물을 계약 체크 + 스프린트 관련 probe/게이트로 평가 → critique.md → PASS/FAIL
-5) PASS → 다음 스프린트 / FAIL & round<cap → 같은 스프린트 재시도(Strategic Decision) / FAIL & round=cap → 미해결 이슈 투명 보고 + 사용자 판단
+1) Generator: propose sprint_contract.md (deliverable + observable checks + output file/format, mode-adapted)
+2) Evaluator: approve or amend the contract (strengthen if the checks are weaker than the spec/playbook bars) — no building before approval
+3) Generator: write the sprint deliverable → self-verify (all contract checks) → generator_report.md → READY_FOR_QA
+4) Evaluator: evaluate the deliverable against the contract checks + sprint-relevant probes/gates → critique.md → PASS/FAIL
+5) PASS → next sprint / FAIL & round<cap → retry the same sprint (Strategic Decision) / FAIL & round=cap → transparently report unresolved issues + user judgment
 ```
 
-## 반복 캡 (per sprint)
+## Iteration cap (per sprint)
 
-- **5–15 rounds per sprint, 기본 시작 ~8** (범위, 단일값 아님).
-- 저점(5)을 고르면 후반 라운드 돌파를 놓칠 수 있음 — "iteration 10 leap" 경고(SKILL.md). 캡은 스프린트별 적용, 전체 런 = 4개 스프린트 합.
+- **5–15 rounds per sprint, default start ~8** (a range, not a single value).
+- Picking the low end (5) may miss a late-round breakthrough — "iteration 10 leap" warning (SKILL.md). The cap applies per sprint; the whole run = the sum of the 4 sprints.
 
-## 파일 흐름 (Full file set)
+## File flow (Full file set)
 
-`spec.md`·`sprint-playbook.md`(Planner→) / `sprint_contract.md`(Generator⇄Evaluator, 스프린트별) / `research-s1.md`·`research-s2.md`·`research-s3.md`(스프린트 산출물, 후속 스프린트가 읽음) / `service-plan.md`(S4 최종) / `generator_report.md`·`critique.md`(스프린트별+최종) / `handoff.md`(컨텍스트 압박 시).
+`spec.md`·`sprint-playbook.md` (Planner→) / `sprint_contract.md` (Generator⇄Evaluator, per sprint) / `research-s1.md`·`research-s2.md`·`research-s3.md` (sprint deliverables, read by subsequent sprints) / `service-plan.md` (S4 final) / `generator_report.md`·`critique.md` (per sprint + final) / `handoff.md` (under context pressure).
